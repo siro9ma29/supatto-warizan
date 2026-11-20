@@ -572,6 +572,23 @@ body.fever::before{display:none;}
 .gear-tip.show{display:block;}
 .dbg-tag{position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 92px);z-index:70;background:var(--ruby);color:#fff;font-weight:900;font-size:12px;padding:3px 8px;border-radius:8px;display:none;pointer-events:none;}
 .dbg-tag.show{display:block;}
+/* テストモード（先生用。バージョンの 文字を 3びょう いないに 5回 タッチ → パスワード） */
+.ver-badge{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:8px;font-size:.9em;background:rgba(253,248,232,.14);border:1px solid rgba(245,176,65,.5);color:#d8d0ff;cursor:default;-webkit-user-select:none;user-select:none;}
+.ver-badge.testing{color:#fff;background:#e03131;border-color:#e03131;}
+.tm-ov{z-index:90;}
+.tm-ov .modal-in{max-height:92vh;overflow-y:auto;gap:6px;}
+.tm-ov h3{color:#c92a2a;}
+.tm-ov p{text-align:left;}
+.tm-ov input{font:inherit;font-size:22px;width:100%;box-sizing:border-box;padding:8px;border:2px solid #b08a4a;border-radius:10px;text-align:center;letter-spacing:.3em;}
+.tm-ov .mbtn{padding:10px 8px;}
+.tm-ov .mbtn.warn{background:#fff4e6;color:#d9480f;}
+.tm-ov .mbtn.back{background:#ebfbee;color:#2b8a3e;}
+.tm-ov .mbtn.close{background:#495057;color:#fff;}
+.tm-ov .mbtn:disabled{opacity:.45;}
+.tm-dan{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;}
+.tm-dan .mbtn{padding:8px 0;font-size:15px;}
+.tm-msg{min-height:1.4em;color:#c92a2a;font-weight:900;text-align:center;font-size:14px;}
+.tm-hr{border:none;border-top:1px dashed #b08a4a;margin:4px 0;width:100%;}
 
 @media (orientation:landscape) and (min-aspect-ratio:5/4){
   .w-main{width:min(100%,1000px);display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr);align-items:stretch;}
@@ -594,7 +611,7 @@ body.fever::before{display:none;}
   <section id="home" class="screen active">
     <div class="w-head">
       <button id="gearBtn" aria-label="おとなの 人の せってい">⚙</button>
-      <div class="w-title"><b>💎 まほうの ほうせき こうぼう</b><small>スパッと！わり算マスター ・ 1日 4もんで 1だんかい そだつ</small></div>
+      <div class="w-title"><b>💎 まほうの ほうせき こうぼう</b><small>スパッと！わり算マスター ・ 1日 4もんで 1だんかい そだつ<span class="ver-badge" id="verBadge">v3.0</span></small></div>
     </div>
     <div class="w-main">
       <div class="w-card frame" id="wCard"></div>
@@ -2125,6 +2142,133 @@ window.addEventListener('resize', function(){
   if(c && G && G.q) fitBlocks(area, c, c.classList.contains('groups') ? G.q.a + G.q.ans * 3 : G.q.a);
 });
 document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+
+/* ================= テストモード（先生の 動作確認用） ================= */
+// バージョンの 文字（こうぼうの 上の v3.0）を 3びょう いないに 5回 タッチ → パスワード → テストメニュー。
+// さいしょに データを かえる まえに、いまの きろく（supattoWarizan_ で はじまる キー ぜんぶ）を TM_BAK_KEY に 1回だけ ほぞん。
+// 「もとの きろくに もどす」で その 時点に もどる（よみなおし）。ほぞんが ある あいだは バッジが 赤く「テスト中」。
+var TM_PASS = '9981';                     // パスワード（かえる ときは ここだけ）
+var TM_BAK_KEY = KEY + 'testbak_v1';
+var VER_TEXT = $('verBadge').textContent;
+function tmHasBak(){ try{ return localStorage.getItem(TM_BAK_KEY) !== null; }catch(e){ return false; } }
+function tmBadge(){ var t = tmHasBak(), b = $('verBadge'); b.classList.toggle('testing', t); b.textContent = t ? '🧪 テスト中' : VER_TEXT; }
+function tmKeys(){
+  var r = [];
+  try{ for(var i = 0; i < localStorage.length; i++){ var k = localStorage.key(i); if(k && k.indexOf(KEY) === 0 && k !== TM_BAK_KEY) r.push(k); } }catch(e){}
+  return r;
+}
+function tmBackup(){
+  if(tmHasBak()) return true;
+  try{
+    var o = {}; tmKeys().forEach(function(k){ o[k] = localStorage.getItem(k); });
+    localStorage.setItem(TM_BAK_KEY, JSON.stringify({ at:new Date().toLocaleString(), data:o }));
+    return true;
+  }catch(e){ return false; }
+}
+function tmRestore(){
+  try{
+    var b = JSON.parse(localStorage.getItem(TM_BAK_KEY) || 'null'); if(!b || !b.data) return false;
+    tmKeys().forEach(function(k){ localStorage.removeItem(k); });
+    Object.keys(b.data).forEach(function(k){ localStorage.setItem(k, b.data[k]); });
+    localStorage.removeItem(TM_BAK_KEY); return true;
+  }catch(e){ return false; }
+}
+/* しあがった ほうせきの 成績（★に 合う 鑑定書用の きろく） */
+function tmLast(star, rainbow){
+  if(star === 3) return { star:3, ok:16, avg:1.8, aura:true,  black:rainbow };
+  if(star === 2) return { star:2, ok:13, avg:3.6, aura:false, black:rainbow };
+  return               { star:1, ok:9,  avg:5.4, aura:false, black:rainbow };
+}
+/* その だん（わる数）の 9こを 図かんに。mix＝★1〜3と にじ色を まぜる */
+function tmFill(dans, mix){
+  dans.forEach(function(b){
+    for(var n = 1; n <= 9; n++){
+      var key = mkQ(b, n).key, old = zukan[key];
+      var star = mix ? rand(1, 3) : 3, rb = mix ? Math.random() < 0.3 : false;
+      zukan[key] = { n:Math.max(1, old ? old.n : 0), star:star, rainbow:rb, first:(old && old.first) || today(), date:today(), last:tmLast(star, rb) };
+      crafts = crafts.filter(function(c){ return c.key !== key; });
+      if(dig && dig.key === key) dig = null;
+    }
+  });
+  homeSel = null; saveZukan(); saveCraft();
+}
+/* さぎょうだいに 1〜3日目の ほうせき（黒い げんせきも）を ならべる。どれも きょう つづきが できる */
+function tmBench(){
+  var busy = {}; crafts.forEach(function(c){ busy[c.key] = true; }); if(dig) busy[dig.key] = true;
+  var free = shuffle(allQ().filter(function(q){ return !busy[q.key]; }));
+  [{ d:1 }, { d:2 }, { d:3, aura:true }, { d:2, black:true }, { d:3, black:true }].forEach(function(o, i){
+    if(!free[i]) return;
+    var log = []; for(var j = 0; j < o.d; j++) log.push({ c:4, t:8 });
+    crafts.push({ key:free[i].key, black:!!o.black, day:o.d, last:'', log:log, aura:!!o.aura, start:today() });
+  });
+  homeSel = null; saveCraft();
+}
+/* にがて問題を つくる（とっくんが ひらき、黒い げんせきが 出るように） */
+function tmWeak(){
+  shuffle(allQ()).slice(0, 8).forEach(function(q, i){ weak[q.key] = i < 4 ? 8 : 2; });
+  save('weak', weak);
+}
+function tmLegend(){ total = Math.max(total, TITLES[TITLES.length - 1].n); save('total', total); }
+
+function tmOpen(){
+  if(document.querySelector('.tm-ov')) return;
+  var ov = document.createElement('div');
+  ov.className = 'modal show tm-ov';
+  document.body.appendChild(ov);
+  var close = function(){ ov.remove(); tmBadge(); goTab('home'); };
+  ov.innerHTML = '<div class="modal-in frame"><h3>🔑 先生用</h3><p>パスワードを 入れてください</p>' +
+    '<input type="password" inputmode="numeric" autocomplete="off" id="tmPw"><div class="tm-msg"></div>' +
+    '<button type="button" class="gbtn mbtn" id="tmOk">OK</button><button type="button" class="gbtn mbtn close" id="tmNo">とじる</button></div>';
+  var pw = ov.querySelector('#tmPw'), msg = ov.querySelector('.tm-msg');
+  var ok = function(){ if(pw.value === TM_PASS) tmMenu(ov, close); else { msg.textContent = 'ちがいます'; pw.value = ''; pw.focus(); } };
+  ov.querySelector('#tmOk').addEventListener('click', ok);
+  pw.addEventListener('keydown', function(e){ if(e.key === 'Enter') ok(); });
+  ov.querySelector('#tmNo').addEventListener('click', function(){ ov.remove(); });
+  setTimeout(function(){ pw.focus(); }, 50);
+}
+function tmMenu(ov, close){
+  var bak = null; try{ bak = JSON.parse(localStorage.getItem(TM_BAK_KEY) || 'null'); }catch(e){}
+  var dan = ''; for(var b = 1; b <= 9; b++) dan += '<button type="button" class="gbtn mbtn" data-b="' + b + '">÷' + b + '</button>';
+  ov.innerHTML = '<div class="modal-in frame"><h3>🧪 テストモード</h3>' +
+    '<p>' + (bak ? '💾 ' + bak.at + ' の きろくを ほぞん ずみ。<br>テストが おわったら「もとの きろくに もどす」を おしてください。'
+                 : 'データを かえる まえに、いまの きろくを じどうで ほぞんします。') + '</p>' +
+    '<p><b>だん（わる数）を えらんで 図かんに</b>（その だんの 9こを ★★★で かんせい）</p><div class="tm-dan">' + dan + '</div>' +
+    '<button type="button" class="gbtn mbtn" data-k="all">👑 81こ ぜんぶ ★★★で かんせい</button>' +
+    '<button type="button" class="gbtn mbtn" data-k="mix">🌈 81こ ぜんぶ かんせい（★1〜3・にじ色を まぜる）</button>' +
+    '<button type="button" class="gbtn mbtn" data-k="bench">⚒️ さぎょうだいに とちゅうの ほうせきを 5こ ならべる（黒い げんせき入り）</button>' +
+    '<button type="button" class="gbtn mbtn" data-k="weak">🔥 にがて問題を つくる（とっくん・黒い げんせきが 出る）</button>' +
+    '<button type="button" class="gbtn mbtn" data-k="title">🌟 しょうごうを さいこう（わり算レジェンド）に</button>' +
+    '<div class="tm-msg"></div><hr class="tm-hr">' +
+    '<button type="button" class="gbtn mbtn back" data-k="back"' + (bak ? '' : ' disabled') + '>↩️ もとの きろくに もどす（テスト おわり）</button>' +
+    '<button type="button" class="gbtn mbtn close" data-k="close">とじて こうぼうへ</button></div>';
+  var msg = ov.querySelector('.tm-msg');
+  var run = function(f, t){
+    if(!tmBackup()){ msg.textContent = 'ほぞん できなかったので 中止しました'; return; }
+    f(); msg.textContent = '✅ ' + t; sndBeep(true);
+    ov.querySelector('[data-k="back"]').disabled = false; tmBadge();
+  };
+  ov.querySelectorAll('.tm-dan button').forEach(function(btn){
+    btn.addEventListener('click', function(){ var b = +btn.getAttribute('data-b'); run(function(){ tmFill([b], false); }, '÷' + b + ' の 9こを 図かんに 入れました'); });
+  });
+  var on = function(k, f){ ov.querySelector('[data-k="' + k + '"]').addEventListener('click', f); };
+  on('all',   function(){ run(function(){ tmFill([1,2,3,4,5,6,7,8,9], false); }, '81こ ぜんぶ ★★★で かんせいしました'); });
+  on('mix',   function(){ run(function(){ tmFill([1,2,3,4,5,6,7,8,9], true); }, '81こ ぜんぶ かんせいしました（★・にじ色 まぜ）'); });
+  on('bench', function(){ run(tmBench, 'さぎょうだいに ほうせきを ならべました'); });
+  on('weak',  function(){ run(tmWeak, 'にがて問題を 8もん つくりました'); });
+  on('title', function(){ run(tmLegend, 'しょうごうを わり算レジェンドに しました'); });
+  on('back',  function(){
+    if(tmRestore()){ msg.textContent = '↩️ もとの きろくに もどしました'; setTimeout(function(){ location.reload(); }, 700); }
+    else msg.textContent = 'もどせませんでした';
+  });
+  on('close', close);
+}
+var tmTaps = [];
+$('verBadge').addEventListener('click', function(){
+  var now = Date.now();
+  tmTaps = tmTaps.filter(function(t){ return now - t < 3000; }); tmTaps.push(now);
+  if(tmTaps.length >= 5){ tmTaps = []; tmOpen(); }
+});
+tmBadge();
 
 /* ================= はじめ ================= */
 renderMute();
