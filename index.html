@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#ffe9a8">
+<meta name="theme-color" content="#1a1b41">
 <title>スパッと！わり算マスター</title>
 <style>
 :root{
@@ -354,6 +354,225 @@ button{font:inherit;color:inherit;border:none;cursor:pointer;}
 @keyframes sparkle{0%{transform:scale(0) rotate(0);opacity:0}30%{transform:scale(1.2) rotate(40deg);opacity:1}100%{transform:translateY(-40px) scale(.4) rotate(160deg);opacity:0}}
 .confetti{position:absolute;top:-20px;width:10px;height:16px;border-radius:3px;animation:fall linear forwards;}
 @keyframes fall{to{transform:translate(var(--x),110vh) rotate(var(--r));}}
+
+/* =====================================================================
+   v3.0 テーマ：まほうの ほうせき こうぼう ＆ アンティークな ほうせき店
+   ===================================================================== */
+:root{
+  --navy:#1a1b41; --navy2:#2b2a6b; --cream:#fdf8e8; --cream2:#f4e9c8;
+  --gold:#f5b041; --gold-dk:#a8700f; --ruby:#e74c3c; --emerald:#2ecc71;
+  --ink:#2b2350; --ink-soft:#6a5f80;
+}
+body{
+  color:var(--cream);
+  background:radial-gradient(ellipse at 50% -10%,#3d3c94 0%,#1a1b41 58%,#10102c 100%);
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.85;
+  background:
+    radial-gradient(1.6px 1.6px at 8% 12%,#fff 50%,transparent 52%),
+    radial-gradient(1.2px 1.2px at 22% 38%,#ffe9b0 50%,transparent 52%),
+    radial-gradient(2px 2px at 35% 8%,#fff 50%,transparent 52%),
+    radial-gradient(1.2px 1.2px at 48% 26%,#cfe0ff 50%,transparent 52%),
+    radial-gradient(1.8px 1.8px at 63% 14%,#fff 50%,transparent 52%),
+    radial-gradient(1.2px 1.2px at 77% 34%,#ffe9b0 50%,transparent 52%),
+    radial-gradient(2px 2px at 90% 9%,#fff 50%,transparent 52%),
+    radial-gradient(1.2px 1.2px at 14% 66%,#cfe0ff 50%,transparent 52%),
+    radial-gradient(1.6px 1.6px at 30% 84%,#fff 50%,transparent 52%),
+    radial-gradient(1.2px 1.2px at 56% 72%,#ffe9b0 50%,transparent 52%),
+    radial-gradient(1.8px 1.8px at 70% 90%,#fff 50%,transparent 52%),
+    radial-gradient(1.2px 1.2px at 86% 62%,#cfe0ff 50%,transparent 52%),
+    radial-gradient(1.4px 1.4px at 95% 80%,#fff 50%,transparent 52%);
+  animation:starTw 4s ease-in-out infinite alternate;
+}
+@keyframes starTw{from{opacity:.45}to{opacity:.95}}
+body.fever::before{display:none;}
+#app{z-index:1;}
+
+/* ---- カードの わく（羊皮紙＋金の 二重わく） ---- */
+.frame{
+  background:radial-gradient(ellipse at 30% 20%,#fffdf5 0%,var(--cream) 55%,var(--cream2) 100%);
+  color:var(--ink);border-radius:20px;
+  box-shadow:0 0 0 3px var(--gold),0 0 0 6px #6b4710,0 0 0 8px var(--gold),0 12px 26px rgba(0,0,0,.45);
+}
+
+/* ---- 宝石カットの ボタン（ななめに 切った 角・金の ふち・キラッ） ---- */
+.gbtn{
+  position:relative;overflow:hidden;isolation:isolate;
+  clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);
+  border-radius:0!important;
+  box-shadow:inset 0 0 0 3px rgba(255,227,154,.95),inset 0 0 0 5px rgba(122,80,15,.55),inset 0 -7px 0 rgba(0,0,0,.2),inset 0 7px 0 rgba(255,255,255,.22)!important;
+  transition:transform .09s ease, filter .2s;
+}
+.gbtn::after{
+  content:'';position:absolute;top:-10%;left:-70%;width:45%;height:120%;z-index:2;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);transform:skewX(-22deg);
+}
+.gbtn:hover::after,.gbtn:active::after,.gbtn.shine::after{animation:shine .75s ease-out;}
+.gbtn.shine::after{animation:shine 2.6s ease-out infinite;}
+@keyframes shine{0%{left:-70%}30%,100%{left:140%}}
+.gbtn:active:not(:disabled){transform:scale(.96)!important;}
+.gbtn:disabled{filter:grayscale(.5) brightness(.9);cursor:default;}
+
+/* ---- いままでの 部品を テーマの 色に ---- */
+.mini{background:rgba(253,248,232,.95);color:var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.35);}
+#muteBtn{background:rgba(253,248,232,.95);box-shadow:0 4px 0 rgba(0,0,0,.35);}
+.logo-a{color:var(--gold);text-shadow:2px 2px 0 #6b4710,4px 5px 0 rgba(0,0,0,.4);}
+.logo-b{color:#fff;text-shadow:3px 3px 0 #2b2a6b,-2px -2px 0 #2b2a6b,2px -2px 0 #2b2a6b,-2px 2px 0 #2b2a6b,5px 6px 0 rgba(0,0,0,.4);}
+.rank-badge{border-color:var(--gold);}
+.rank-info{color:#e5ddff;}
+.mode{border:none;}
+.mode.all{background:linear-gradient(135deg,#9b5de5,#3a86ff 45%,#2ecc71 80%,#f5b041);}
+.mode.easy{background:linear-gradient(135deg,#2ecc71,#138d4b);}
+.mode.hard{background:linear-gradient(135deg,#f39c12,#c0392b);}
+.m-best{background:rgba(253,248,232,.95);}
+.sub-btn{border:none;color:var(--ink);}
+#tokuBtn{background:linear-gradient(135deg,#fff4e0,#ffd8b0);}
+#boxBtn{background:linear-gradient(135deg,#fdf8e8,#e8ddb8);}
+#boxBtn .s-title{color:#7a4b00;}
+.free-note{width:min(100%,720px);margin:0 auto;text-align:center;font-weight:900;font-size:clamp(12px,2.2vmin,17px);color:#ffe39a;}
+
+.p-top .timer{color:var(--cream);}
+.p-top .timer small{color:#cfc6ef;}
+.qcount{background:var(--cream);color:var(--ink);}
+.combo-small{background:var(--cream);}
+.rule-note{color:#ffb3a7;}
+.rule-note.toku{color:#ffd59a;}
+.rule-note.craft{color:#9ff0c0;}
+.race{background:rgba(253,248,232,.92);color:var(--ink);}
+.q-side{background:radial-gradient(ellipse at 30% 20%,#fffdf5,var(--cream) 60%,var(--cream2));color:var(--ink);border:none;
+  box-shadow:0 0 0 3px var(--gold),0 0 0 5px #6b4710,0 8px 18px rgba(0,0,0,.4);}
+.choice{background:linear-gradient(180deg,#fffdf4,#f3e6c2);border-color:#e2c27a;box-shadow:0 7px 0 #9c7a3c;}
+.choice:active:not(:disabled){transform:translateY(5px) scale(.97);box-shadow:0 2px 0 #9c7a3c;}
+.choice .kn{background:#f1e3bb;color:#8a6a2a;}
+.target-badge{display:none;font-weight:900;font-size:clamp(13px,2.3vmin,18px);padding:3px 12px;border-radius:99px;align-items:center;white-space:nowrap;
+  background:linear-gradient(135deg,#ffe39a,#f5b041);color:#5a3500;box-shadow:0 3px 0 #a8700f;animation:pulse .9s ease-in-out infinite;}
+.target-badge.show{display:inline-flex;}
+.countdown{background:rgba(26,27,65,.72);color:var(--gold);text-shadow:4px 4px 0 #6b4710,8px 10px 0 rgba(0,0,0,.4);}
+.countdown.small{color:#fff;}
+.countdown .cd-rule{background:var(--cream);color:var(--ink);}
+
+.r-card{background:radial-gradient(ellipse at 30% 20%,#fffdf5,var(--cream) 60%,var(--cream2));color:var(--ink);border:none;
+  box-shadow:0 0 0 3px var(--gold),0 0 0 6px #6b4710,0 0 0 8px var(--gold),0 12px 26px rgba(0,0,0,.45);margin-top:clamp(46px,8vh,66px);}
+.r-title{color:#c0392b;text-shadow:2px 2px 0 #ffe39a;}
+.r-title.craft{color:#138d4b;text-shadow:2px 2px 0 #d8f7e3;font-size:clamp(22px,5vmin,44px);white-space:nowrap;}
+.r-gems.one{--gw:clamp(96px,17vmin,150px);}
+.w-name small{display:block;font-size:.8em;color:var(--ink-soft);}
+.r-time{color:#2b2a6b;}
+.r-sec{border-top-color:#e2c27a;}
+.fb-row{background:#f6edd2;}
+.r-btns .btn{color:var(--ink);background:linear-gradient(180deg,#fffdf4,#efe0b6);}
+#againBtn{background:linear-gradient(135deg,#2ecc71,#138d4b);color:#fff;}
+.gface{border-color:#e2c27a;}
+.r-done{display:none;align-self:stretch;text-align:center;border-radius:16px;padding:6px 10px;background:linear-gradient(135deg,#fff4c9,#ffe39a);border:3px solid var(--gold);}
+.r-done.show{display:block;}
+.r-done .rd-name{font-size:clamp(18px,4vmin,30px);font-weight:900;color:#5a3500;}
+.r-done .rd-star{font-size:clamp(22px,5vmin,40px);color:#e09b12;letter-spacing:2px;text-shadow:0 2px 0 #fff;}
+.r-done .rd-note{font-size:clamp(12px,2.2vmin,16px);font-weight:700;color:#7a5a20;}
+.r-done.rainbow{background:linear-gradient(120deg,#ffd6e0,#fff3b0,#d4ffd9,#cfe9ff,#ead6ff);border-color:#b47cff;}
+
+/* ---- ナビゲーション（こうぼうの かんばん） ---- */
+#nav{display:none;flex:none;gap:clamp(4px,1vmin,10px);position:relative;z-index:5;
+  padding:7px max(10px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));
+  background:linear-gradient(180deg,#6b4423,#4a2d14);border-top:3px solid var(--gold);box-shadow:0 -5px 14px rgba(0,0,0,.4);}
+#nav.show{display:flex;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:clamp(54px,8.5vh,72px);padding:4px 2px;
+  font-weight:900;font-size:clamp(11px,2.1vmin,16px);color:#f6e7c4;background:linear-gradient(180deg,#8a5a2e,#5e3a1a);white-space:nowrap;}
+.nav-btn .ni{font-size:clamp(22px,4.2vmin,32px);line-height:1.1;filter:drop-shadow(0 2px 0 rgba(0,0,0,.35));}
+.nav-btn.on{background:linear-gradient(180deg,#ffe9a8,#f5b041);color:#4a2c00;}
+
+/* ---- こうぼう（ホーム） ---- */
+.w-head{display:flex;align-items:center;justify-content:center;min-height:52px;padding:0 62px;position:relative;}
+#gearBtn{position:absolute;left:0;top:0;width:52px;height:52px;border-radius:50%;font-size:24px;background:rgba(253,248,232,.14);color:var(--cream);border:2px solid rgba(245,176,65,.5);touch-action:none;}
+.w-title{text-align:center;line-height:1.1;}
+.w-title b{display:block;font-size:clamp(20px,4.6vmin,38px);color:var(--gold);text-shadow:2px 2px 0 #6b4710,4px 5px 0 rgba(0,0,0,.4);letter-spacing:.03em;}
+.w-title small{font-size:clamp(12px,2.2vmin,17px);color:#d8d0ff;font-weight:700;}
+.w-main{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;gap:clamp(10px,1.8vh,18px);width:min(100%,720px);margin:0 auto;padding:8px 8px 2px;}
+.w-card{width:100%;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(4px,1vh,10px);padding:clamp(8px,1.6vh,16px) 12px;}
+.w-side{width:100%;display:flex;flex-direction:column;gap:10px;}
+.w-gem{flex:1;min-height:70px;max-height:min(40vh,380px);width:100%;display:flex;align-items:center;justify-content:center;position:relative;}
+.w-gem::before{content:'';position:absolute;bottom:2%;left:50%;width:min(58%,220px);height:16%;transform:translateX(-50%);border-radius:50%;
+  background:radial-gradient(ellipse,rgba(107,71,16,.35),transparent 70%);}
+.w-gem .gem{height:100%;width:auto;max-width:100%;aspect-ratio:1;position:relative;animation:gemFloat 3s ease-in-out infinite;}
+@keyframes gemFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.w-name{font-size:clamp(18px,3.8vmin,30px);font-weight:900;text-align:center;line-height:1.2;}
+.w-name.black{color:#4c1d95;}
+.w-sub{font-size:clamp(12px,2.3vmin,18px);font-weight:700;color:var(--ink-soft);text-align:center;line-height:1.35;}
+.days{display:flex;align-items:center;gap:3px;justify-content:center;}
+.day{display:flex;flex-direction:column;align-items:center;padding:3px 6px;border-radius:12px;background:#efe4c2;color:#a08f68;font-weight:900;
+  font-size:clamp(10px,1.9vmin,15px);min-width:clamp(58px,11vmin,92px);line-height:1.2;}
+.day .di{font-size:1.5em;}
+.day.done{background:#d5f5df;color:#166534;}
+.day.now{background:#fff;color:var(--ink);box-shadow:0 0 0 3px var(--gold);}
+.day-ar{color:#c9b48a;font-size:12px;}
+.go-btn{width:100%;font-size:clamp(18px,4vmin,32px);font-weight:900;color:#fff;padding:clamp(10px,2.2vh,18px) 12px;line-height:1.2;
+  background:linear-gradient(135deg,#2ecc71,#138d4b);text-shadow:0 2px 0 rgba(0,0,0,.3);}
+.go-btn small{display:block;font-size:.55em;opacity:.95;}
+.go-btn.done{background:linear-gradient(135deg,#55549a,#34336f);}
+.w-stats{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
+.w-stats span{background:rgba(253,248,232,.12);color:var(--cream);border:2px solid rgba(245,176,65,.55);border-radius:12px;padding:3px 10px;font-weight:900;font-size:clamp(11px,2vmin,15px);white-space:nowrap;}
+
+/* ---- ほうせき図かん（81しゅるい） ---- */
+.z-top{padding-left:62px;}
+.z-top h2{color:var(--gold);text-shadow:2px 2px 0 #6b4710;}
+.z-sum span{background:var(--cream);color:var(--ink);}
+.z-sum span.main{background:var(--gold);color:#4a2c00;}
+.z-grid{background:radial-gradient(ellipse at 30% 20%,#fffdf5,var(--cream) 60%,var(--cream2));box-shadow:0 0 0 3px var(--gold),0 0 0 5px #6b4710;grid-template-rows:calc(var(--cs)*1.1);}
+.z-head{color:var(--ink);flex-direction:column;gap:1px;line-height:1;}
+.z-head i{display:block;width:calc(var(--cs)*.34);height:calc(var(--cs)*.34);border-radius:50%;border:1.5px solid rgba(0,0,0,.25);}
+.z-row{background:#f1e5c0;color:#6b4a14;}
+.z-cell{background:#fffaf0;}
+.z-cell.wip{outline:2px dashed var(--gold);outline-offset:-2px;background:#fff6dc;}
+.z-cell.got{background:radial-gradient(circle,#fff3c4,#fffaf0);}
+.z-cell.rb{background:radial-gradient(circle,#ffe6f3,#e8f6ff);}
+.z-cell.sel{outline:3px solid #9b5de5;outline-offset:1px;}
+.z-detail{background:radial-gradient(ellipse at 30% 20%,#fffdf5,var(--cream) 60%,var(--cream2));color:var(--ink);border:none;
+  box-shadow:0 0 0 3px var(--gold),0 0 0 5px #6b4710,0 8px 18px rgba(0,0,0,.4);}
+.zd-lv{color:#7a4b00;}
+.zd-path{background:#f4ead0;}
+.zp-step.now{box-shadow:0 0 0 3px var(--gold);}
+.z-foot{color:#d8d0ff;justify-content:center;text-align:center;}
+
+/* ---- マイほうせき店 ---- */
+.s-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;width:min(100%,900px);margin:0 auto;}
+.s-sign{align-self:center;padding:6px 26px;font-weight:900;font-size:clamp(16px,3.6vmin,28px);color:#ffe9a8;
+  background:linear-gradient(180deg,#8a5a2e,#5e3a1a);border:3px solid var(--gold);border-radius:12px;box-shadow:0 5px 0 #3a230d;text-shadow:0 2px 0 rgba(0,0,0,.4);}
+.s-case{flex:1;min-height:0;overflow-y:auto;padding:12px 14px 0;border-radius:18px;--rowh:clamp(96px,15vh,130px);
+  background:repeating-linear-gradient(180deg,transparent 0,transparent calc(var(--rowh) - 12px),#7a4a22 calc(var(--rowh) - 12px),#a06a35 calc(var(--rowh) - 6px),#5e3a1a var(--rowh)),
+             linear-gradient(180deg,#3b2a55,#2a1f45);
+  background-position:0 12px,0 0;
+  box-shadow:0 0 0 3px var(--gold),0 0 0 6px #6b4710,inset 0 0 30px rgba(0,0,0,.5);
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(70px,12vmin,100px),1fr));grid-auto-rows:var(--rowh);align-items:end;gap:0 8px;}
+.s-item{height:calc(var(--rowh) - 16px);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:1px;cursor:pointer;background:none;margin-bottom:12px;}
+.s-item .gem{width:78%;height:auto;flex:1;min-height:0;filter:drop-shadow(0 4px 4px rgba(0,0,0,.5));}
+.s-item span{font-size:clamp(9px,1.6vmin,12px);font-weight:900;color:#ffe9a8;white-space:nowrap;text-shadow:0 1px 2px #000;}
+.s-empty{grid-column:1/-1;grid-row:1 / span 2;align-self:center;text-align:center;color:#e5ddff;font-weight:900;font-size:clamp(14px,2.8vmin,20px);line-height:1.6;}
+.s-note{text-align:center;color:#d8d0ff;font-weight:700;font-size:clamp(12px,2.1vmin,16px);}
+
+/* ---- おとな用（せってい） ---- */
+.modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;background:rgba(10,10,30,.7);padding:16px;}
+.modal.show{display:flex;}
+.modal-in{width:min(100%,460px);padding:16px;display:flex;flex-direction:column;gap:10px;}
+.modal-in h3{text-align:center;font-size:clamp(18px,3.6vmin,26px);}
+.modal-in p{font-size:clamp(12px,2.2vmin,15px);font-weight:700;color:var(--ink-soft);text-align:center;line-height:1.4;}
+.modal-in .mbtn{font-size:clamp(14px,2.6vmin,18px);font-weight:900;padding:12px 10px;color:var(--ink);background:linear-gradient(180deg,#fffdf4,#efe0b6);}
+.modal-in .mbtn.debug{background:linear-gradient(135deg,#ffe39a,#f5b041);color:#4a2c00;}
+.modal-in .mbtn.arm{background:#ffe4e6;color:#be123c;}
+.gear-tip{position:fixed;left:12px;top:64px;z-index:70;background:var(--cream);color:var(--ink);font-weight:900;font-size:13px;padding:6px 10px;border-radius:10px;box-shadow:0 3px 0 rgba(0,0,0,.3);display:none;}
+.gear-tip.show{display:block;}
+.dbg-tag{position:fixed;left:8px;bottom:calc(env(safe-area-inset-bottom) + 92px);z-index:70;background:var(--ruby);color:#fff;font-weight:900;font-size:12px;padding:3px 8px;border-radius:8px;display:none;pointer-events:none;}
+.dbg-tag.show{display:block;}
+
+@media (orientation:landscape) and (min-aspect-ratio:5/4){
+  .w-main{width:min(100%,1000px);display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr);align-items:stretch;}
+  .w-side{justify-content:center;}
+  .z-detail{width:clamp(240px,32vw,360px);}
+}
+@media (orientation:landscape) and (max-height:520px){
+  .nav-btn{min-height:44px;flex-direction:row;gap:6px;}
+  .nav-btn .ni{font-size:22px;}
+  .w-sub{display:none;}
+}
 </style>
 </head>
 <body>
@@ -361,16 +580,32 @@ button{font:inherit;color:inherit;border:none;cursor:pointer;}
 
   <button id="muteBtn" aria-label="おとの オン・オフ">🔊</button>
 
-  <!-- ===== タイトル・モード選択 ===== -->
-  <section id="title" class="screen active">
+  <!-- ===== こうぼう（ホーム） ===== -->
+  <section id="home" class="screen active">
+    <div class="w-head">
+      <button id="gearBtn" aria-label="おとなの 人の せってい">⚙</button>
+      <div class="w-title"><b>💎 まほうの ほうせき こうぼう</b><small>スパッと！わり算マスター ・ 1日 4もんで ほうせきが そだつ</small></div>
+    </div>
+    <div class="w-main">
+      <div class="w-card frame" id="wCard"></div>
+      <div class="w-side">
+        <button class="gbtn go-btn" id="goBtn"></button>
+        <div class="w-stats" id="wStats"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== フリー練習（いままでの 4択タイムアタック） ===== -->
+  <section id="title" class="screen">
     <header class="t-head">
-      <h1 class="logo"><span class="logo-a">スパッと！</span><span class="logo-b">わり算マスター</span></h1>
+      <h1 class="logo"><span class="logo-a">🎯 フリー練習</span><span class="logo-b">わり算マスター</span></h1>
       <div class="rank" id="rank"></div>
     </header>
+    <div class="free-note" id="freeNote"></div>
     <div class="modes" id="modes"></div>
     <div class="sub-row">
-      <button class="btn sub-btn" id="tokuBtn"></button>
-      <button class="btn sub-btn" id="boxBtn"></button>
+      <button class="btn gbtn sub-btn" id="tokuBtn"></button>
+      <button class="btn gbtn sub-btn" id="boxBtn"></button>
     </div>
   </section>
 
@@ -391,7 +626,7 @@ button{font:inherit;color:inherit;border:none;cursor:pointer;}
       <div class="q-side">
         <div class="badges">
           <span class="weak-badge" id="weakBadge">🔥 にがてこくふく！</span>
-          <span class="crack-badge" id="crackBadge">💔 ひびを なおそう</span>
+          <span class="target-badge" id="targetBadge">💎 ほうせきの 問題！</span>
           <span class="fever-badge" id="feverBadge">🌈 フィーバー タイム！</span>
         </div>
         <div class="toast" id="toast"></div>
@@ -419,6 +654,7 @@ button{font:inherit;color:inherit;border:none;cursor:pointer;}
       <div class="r-sub" id="rSub"></div>
       <div class="r-rankup" id="rRankup"></div>
       <div class="r-miss" id="rMiss"></div>
+      <div class="r-done" id="rDone"></div>
       <div class="r-sec" id="rGemHead">💎 きょうの ほうせき</div>
       <div class="r-gems" id="rGems"></div>
       <div class="r-gnote" id="rGnote"></div>
@@ -426,16 +662,15 @@ button{font:inherit;color:inherit;border:none;cursor:pointer;}
       <div class="r-fb" id="rFb"></div>
     </div>
     <div class="r-btns">
-      <button class="btn" id="againBtn">🔁 もういちど ちょうせん</button>
-      <button class="btn" id="toTitleBtn">🏠 タイトルへ もどる</button>
+      <button class="btn gbtn" id="againBtn">🔁 もういちど ちょうせん</button>
+      <button class="btn gbtn" id="toTitleBtn">🏠 もどる</button>
     </div>
   </section>
 
-  <!-- ===== ほうせきばこ ===== -->
+  <!-- ===== ほうせき図かん（81しゅるい） ===== -->
   <section id="zukan" class="screen">
     <div class="z-top">
-      <button class="mini" id="zBack">← もどる</button>
-      <h2>💎 ほうせきばこ</h2>
+      <h2>📖 ほうせき図かん</h2>
     </div>
     <div class="z-sum" id="zSum"></div>
     <div class="z-body">
@@ -443,12 +678,44 @@ button{font:inherit;color:inherit;border:none;cursor:pointer;}
       <div class="z-detail" id="zDetail"></div>
     </div>
     <div class="z-foot">
-      <span>たて＝わる数の だん　よこ＝こたえ</span>
-      <button class="mini" id="weakReset">にがて きろくを リセット</button>
+      <span>よこ＝わる数の だん（ほうせきの 色）　たて＝答え（アクセサリーの 形）</span>
     </div>
   </section>
+
+  <!-- ===== マイほうせき店 ===== -->
+  <section id="shop" class="screen">
+    <div class="z-top"><h2>🏪 マイほうせき店</h2></div>
+    <div class="s-body">
+      <div class="s-sign" id="sSign">ほうせき店</div>
+      <div class="s-case" id="sCase"></div>
+      <div class="s-note">✨ お店の かざりつけと お客さんは、もうすぐ オープン！</div>
+    </div>
+  </section>
+
+  <!-- ===== メニュー ===== -->
+  <nav id="nav" class="show">
+    <button class="gbtn nav-btn on" data-tab="home"><span class="ni">⚒️</span>こうぼう</button>
+    <button class="gbtn nav-btn" data-tab="zukan"><span class="ni">📖</span>ほうせき図かん</button>
+    <button class="gbtn nav-btn" data-tab="shop"><span class="ni">🏪</span>マイほうせき店</button>
+    <button class="gbtn nav-btn" data-tab="title"><span class="ni">🎯</span>フリー練習</button>
+  </nav>
 </div>
 <div id="fx"></div>
+<div class="gear-tip" id="gearTip">おとなの 人は ⚙ を 長おし してね</div>
+<div class="dbg-tag" id="dbgTag"></div>
+
+<!-- ===== おとなの 人の せってい（⚙を 1びょう 長おし） ===== -->
+<div class="modal" id="setModal">
+  <div class="modal-in frame">
+    <h3>⚙ おとなの 人の せってい</h3>
+    <p id="setDate"></p>
+    <button class="gbtn mbtn debug" id="dbgNext">[デバッグ] 1日 進める</button>
+    <button class="gbtn mbtn" id="dbgReset">日づけを もとに もどす</button>
+    <button class="gbtn mbtn" id="weakReset">にがて きろくを リセット</button>
+    <button class="gbtn mbtn" id="craftReset">こうぼう・図かんの きろくを リセット</button>
+    <button class="gbtn mbtn" id="setClose">とじる</button>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -480,21 +747,33 @@ var TITLES = [
 
 var GROUP_COLORS = ['#ff6b8b','#ffa94d','#ffd43b','#51cf66','#38d9a9','#4dabf7','#748ffc','#b197fc','#f783ac'];
 
-/* 宝石：わる数の だん ごとに 1しゅるい */
+/* 宝石：わる数の だん ごとに 1しゅるい（よこじく） */
 var GEMS = [null,
-  { name:'ルビー',         c1:'#ffb3c1', c2:'#e11d48', c3:'#881337' },
-  { name:'サンストーン',   c1:'#ffd2a8', c2:'#f97316', c3:'#9a3412' },
-  { name:'トパーズ',       c1:'#fff3a3', c2:'#eab308', c3:'#854d0e' },
-  { name:'エメラルド',     c1:'#b4f5d8', c2:'#10b981', c3:'#065f46' },
-  { name:'アクアマリン',   c1:'#c2f7fd', c2:'#06b6d4', c3:'#155e75' },
-  { name:'サファイア',     c1:'#bcd7ff', c2:'#3b82f6', c3:'#1e3a8a' },
-  { name:'アメジスト',     c1:'#e2d4ff', c2:'#8b5cf6', c3:'#4c1d95' },
-  { name:'ローズクォーツ', c1:'#ffd1e8', c2:'#ec4899', c3:'#9d174d' },
-  { name:'ダイヤモンド',   c1:'#ffffff', c2:'#bfe0ff', c3:'#5b7fa8' }
+  { name:'クォーツ',       col:'とうめい（水しょう）', c1:'#ffffff', c2:'#dbe7f5', c3:'#7f95b5' },
+  { name:'ターコイズ',     col:'水色',       c1:'#d4fbff', c2:'#38c6d6', c3:'#0e7490' },
+  { name:'シトリン',       col:'黄色',       c1:'#fff6b8', c2:'#f4c20d', c3:'#a16207' },
+  { name:'ペリドット',     col:'黄みどり',   c1:'#efffc0', c2:'#9bd52b', c3:'#4d7c0f' },
+  { name:'ローズクォーツ', col:'ピンク',     c1:'#ffe3f0', c2:'#f58cba', c3:'#be185d' },
+  { name:'アメジスト',     col:'むらさき',   c1:'#ecdcff', c2:'#9b5de5', c3:'#5b21b6' },
+  { name:'エメラルド',     col:'こい 緑',    c1:'#b7f5d3', c2:'#14a05e', c3:'#064e2b' },
+  { name:'サファイア',     col:'ふかい 青',  c1:'#c7dcff', c2:'#2554d9', c3:'#132a7a' },
+  { name:'ルビー＆ダイヤ', col:'しんく・にじ色', c1:'#ffc6cc', c2:'#e0182d', c3:'#7f0a16' }
 ];
-var LV_NAME  = ['まだ 見つけて いない','げんせき','カット','ピカピカ','アクセサリー'];
-var LV_ICON  = ['？','🪨','✂️','✨','💍'];
-var LV_STARS = ['','★','★★','★★★','★★★★'];
+/* のろわれた 黒い げんせき の 色 */
+var BLACK_GEM = { c1:'#8f7bb0', c2:'#33264d', c3:'#0d0716' };
+/* 4日間の しごと（1日に 1だんかい） */
+var DAYS = [null,
+  { n:'はっくつ',   i:'⛏️', d:'げんせきを ほりだそう' },
+  { n:'あらけずり', i:'🔨', d:'かたちを けずりだそう' },
+  { n:'けんま',     i:'✨', d:'ピカピカに みがこう' },
+  { n:'しあげ',     i:'💍', d:'アクセサリーに しあげよう' }
+];
+var LV_NAME  = ['まだ','げんせき','あらけずり','ピカピカ','かんせい'];
+var LV_ICON  = ['？','⛏️','🔨','✨','💍'];
+var STAR_TXT = ['','★☆☆','★★☆','★★★'];
+var STAR_NAME = ['','ワイルド','グッド','パーフェクト'];
+/* 苦手度スコア（設計書の値） */
+var W_MISS = 5, W_SLOW = 2, W_FAST = -2, SLOW5 = 5, FAST3 = 3, BLACK_MIN = 3, BLACK_RATE = 0.25;
 
 /* ================= 保存 ================= */
 function load(k, def){
@@ -513,12 +792,21 @@ var weak   = load('weak', {});
 var total  = load('total', 0);
 var muted  = load('muted', false);
 var clears = load('clears', {});
-var gems   = load('gems', { cards:{} });
+var craft  = load('craft', null);     // いま こうぼうで 作っている ほうせき
+var zukan  = load('zukan', {});       // かんせいした ほうせき（図かん）
+var dayOffset = load('dayOffset', 0); // [デバッグ] 進めた 日数
 if(!isObj(best)) best = {};
 if(!isObj(weak)) weak = {};
 if(!isObj(clears)) clears = {};
-if(!isObj(gems) || !isObj(gems.cards)) gems = { cards:{} };
+if(!isObj(zukan)) zukan = {};
+if(!isObj(craft) || !craft.key || !Array.isArray(craft.log) || !parseKey(craft.key)) craft = null;
+if(typeof dayOffset !== 'number' || !isFinite(dayOffset)) dayOffset = 0;
 if(typeof total !== 'number' || !isFinite(total)) total = 0;
+/* v2の 苦手スコア（誤答+2・3.5秒以上+1・未満−1）を 設計書の 大きさ（2.5ばい）に 引きつぐ。v2の gems は のこしたまま つかわない */
+if(load('weakV', 1) < 2){
+  Object.keys(weak).forEach(function(k){ weak[k] = Math.round(weak[k] * 2.5); if(!(weak[k] > 0)) delete weak[k]; });
+  save('weak', weak); save('weakV', 2);
+}
 
 /* ================= 道具 ================= */
 function $(id){ return document.getElementById(id); }
@@ -532,11 +820,29 @@ function shuffle(arr){
 function restart(el, cls){ el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
 function fmt(sec){ return (Math.floor(sec * 10) / 10).toFixed(1); }
 function pad(n){ return (n < 10 ? '0' : '') + n; }
-function today(){ var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function ymd(d){ return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function realToday(){ return ymd(new Date()); }
+/* デバッグで 進めた 日数を たした「きょう」 */
+function today(){ var d = new Date(); d.setDate(d.getDate() + (dayOffset | 0)); return ymd(d); }
+function mkQ(b, ans){ return { a:b * ans, b:b, ans:ans, key:(b * ans) + '÷' + b }; }
+function allQ(){ var l = []; for(var b = 1; b <= 9; b++) for(var n = 1; n <= 9; n++) l.push(mkQ(b, n)); return l; }
 
+var TABS = ['home','zukan','shop','title'];
 function showScreen(id){
   var list = document.querySelectorAll('.screen');
   for(var i = 0; i < list.length; i++) list[i].classList.toggle('active', list[i].id === id);
+  var isTab = TABS.indexOf(id) >= 0;
+  $('nav').classList.toggle('show', isTab);
+  var nb = document.querySelectorAll('.nav-btn');
+  for(var j = 0; j < nb.length; j++) nb[j].classList.toggle('on', nb[j].getAttribute('data-tab') === id);
+}
+function goTab(id){
+  if(id === 'home') renderHome();
+  else if(id === 'zukan') openZukan();
+  else if(id === 'shop') renderShop();
+  else renderTitle();
+  showScreen(id);
+  if(id === 'zukan') sizeZukan();
 }
 function parseKey(k){
   var p = String(k).split('÷');
@@ -574,15 +880,15 @@ function heartPts(){
   return pts;
 }
 var SHAPES = [null,
-  regPoly(8, 40, 22.5),                                                                      // 1 ルビー：まる
-  [[16,20],[84,20],[84,86],[16,86]],                                                          // 2 四角
-  regPoly(3, 46, 0).map(function(p){ return [p[0], p[1] + 8]; }),                             // 3 三角
-  [[24,14],[76,14],[88,26],[88,80],[76,92],[24,92],[12,80],[12,26]],                          // 4 エメラルドカット
-  regPoly(5, 42, 0),                                                                          // 5 五角
-  regPoly(6, 42, 0),                                                                          // 6 六角
-  [[6,52],[20,36],[36,28],[50,26],[64,28],[80,36],[94,52],[80,68],[64,76],[50,78],[36,76],[20,68]], // 7 マーキス
-  heartPts(),                                                                                 // 8 ハート
-  [[28,20],[72,20],[94,42],[50,94],[6,42]]                                                    // 9 ダイヤ
+  regPoly(6, 42, 0),                                                                          // 1 クォーツ：六角（水しょうの 柱）
+  regPoly(8, 40, 22.5),                                                                       // 2 ターコイズ：まる
+  regPoly(3, 46, 0).map(function(p){ return [p[0], p[1] + 8]; }),                             // 3 シトリン：三角
+  regPoly(5, 42, 0),                                                                          // 4 ペリドット：五角
+  heartPts(),                                                                                 // 5 ローズクォーツ：ハート
+  [[6,52],[20,36],[36,28],[50,26],[64,28],[80,36],[94,52],[80,68],[64,76],[50,78],[36,76],[20,68]], // 6 アメジスト：マーキス
+  [[24,14],[76,14],[88,26],[88,80],[76,92],[24,92],[12,80],[12,26]],                          // 7 エメラルド：エメラルドカット
+  regPoly(4, 47, 0),                                                                          // 8 サファイア：ひし形
+  [[28,20],[72,20],[94,42],[50,94],[6,42]]                                                    // 9 ルビー＆ダイヤ：ダイヤ
 ];
 function centroid(pts){ var x = 0, y = 0; pts.forEach(function(p){ x += p[0]; y += p[1]; }); return [x / pts.length, y / pts.length]; }
 function scalePts(pts, s, ox, oy){
@@ -595,8 +901,7 @@ function star4(cx, cy, r){
          ' Q' + cx + ',' + cy + ' ' + (cx - r) + ',' + cy + ' Q' + cx + ',' + cy + ' ' + cx + ',' + (cy - r) + 'Z';
 }
 /* アクセサリー：こたえ（1〜9）ごとに 1しゅるい */
-var ACCS = [null, 'ゆびわ', 'ネックレス', 'ブレスレット', 'メダル', 'ブローチ', 'つるぎ', 'たて', 'まほうのつえ', 'おうかん'];
-function itemName(dan, ans){ return GEMS[dan].name + 'の ' + ACCS[ans]; }
+var ACCS = [null, 'ひとつぶチャーム', 'ピンバッジ', 'イヤリング', 'ブレスレット', 'ブローチ', 'ペンダント', 'ゆびわ', 'ティアラ', 'でんせつの おうかん'];
 
 /* 小さな宝石（アクセサリーに はめこむ） */
 function miniGem(dan, cx, cy, s, id){
@@ -610,31 +915,37 @@ function accessorySVG(dan, ans, id){
   var G2 = GEMS[dan], au = 'url(#' + id + 'au)', ag = 'url(#' + id + 'ag)', st = '#a16207';
   var s = '';
   switch(ans){
-    case 1: // ゆびわ
-      s += '<circle cx="50" cy="64" r="25" fill="none" stroke="' + st + '" stroke-width="12"/>' +
-           '<circle cx="50" cy="64" r="25" fill="none" stroke="' + au + '" stroke-width="8"/>' +
-           '<path d="M38,44 L44,30 M62,44 L56,30" stroke="' + st + '" stroke-width="4" stroke-linecap="round"/>' +
-           miniGem(dan, 50, 30, 0.42, id);
+    case 1: // ひとつぶチャーム
+      s += '<circle cx="50" cy="12" r="7" fill="none" stroke="' + st + '" stroke-width="5"/>' +
+           '<circle cx="50" cy="12" r="7" fill="none" stroke="' + au + '" stroke-width="3"/>' +
+           '<path d="M50,19 L50,30" stroke="' + st + '" stroke-width="4" stroke-linecap="round"/>' +
+           '<circle cx="50" cy="32" r="5" fill="' + au + '" stroke="' + st + '" stroke-width="2"/>' +
+           '<circle cx="50" cy="62" r="27" fill="none" stroke="' + au + '" stroke-width="3" stroke-dasharray="2 4"/>' +
+           miniGem(dan, 50, 62, 0.5, id);
       break;
-    case 2: // ネックレス
-      s += '<path d="M14,10 Q16,58 50,64 Q84,58 86,10" fill="none" stroke="' + st + '" stroke-width="6" stroke-dasharray="0.1 7" stroke-linecap="round"/>' +
-           '<path d="M14,10 Q16,58 50,64 Q84,58 86,10" fill="none" stroke="#ffe27a" stroke-width="3.5" stroke-dasharray="0.1 7" stroke-linecap="round"/>' +
-           '<circle cx="50" cy="64" r="5" fill="' + au + '" stroke="' + st + '" stroke-width="2"/>' +
-           miniGem(dan, 50, 80, 0.36, id);
+    case 2: // ピンバッジ
+      s += '<path d="M12,88 L84,16" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>' +
+           '<path d="M12,88 L84,16" stroke="#64748b" stroke-width="1.2" stroke-linecap="round"/>' +
+           '<circle cx="50" cy="54" r="34" fill="' + au + '" stroke="' + st + '" stroke-width="3"/>' +
+           '<circle cx="50" cy="54" r="27" fill="' + G2.c1 + '" stroke="' + G2.c2 + '" stroke-width="2.5"/>' +
+           '<circle cx="50" cy="54" r="30.5" fill="none" stroke="#fff3b0" stroke-width="1.5" stroke-dasharray="3 3"/>' +
+           miniGem(dan, 50, 54, 0.36, id);
       break;
-    case 3: // ブレスレット
+    case 3: // イヤリング（ふたつ）
+      [30, 70].forEach(function(x){
+        s += '<path d="M' + (x - 7) + ',16 Q' + x + ',2 ' + (x + 7) + ',16 L' + (x + 3) + ',24" fill="none" stroke="' + st + '" stroke-width="4" stroke-linecap="round"/>' +
+             '<path d="M' + (x - 7) + ',16 Q' + x + ',2 ' + (x + 7) + ',16 L' + (x + 3) + ',24" fill="none" stroke="' + au + '" stroke-width="2.2" stroke-linecap="round"/>' +
+             '<circle cx="' + x + '" cy="30" r="4.5" fill="' + au + '" stroke="' + st + '" stroke-width="1.8"/>' +
+             '<path d="M' + x + ',34 L' + x + ',44" stroke="' + st + '" stroke-width="2.5"/>' +
+             miniGem(dan, x, 64, 0.3, id);
+      });
+      break;
+    case 4: // ブレスレット
       s += '<ellipse cx="50" cy="56" rx="40" ry="22" fill="none" stroke="' + st + '" stroke-width="11"/>' +
            '<ellipse cx="50" cy="56" rx="40" ry="22" fill="none" stroke="' + au + '" stroke-width="7"/>' +
            '<circle cx="20" cy="70" r="5" fill="' + G2.c2 + '" stroke="' + G2.c3 + '" stroke-width="1.5"/>' +
            '<circle cx="80" cy="70" r="5" fill="' + G2.c2 + '" stroke="' + G2.c3 + '" stroke-width="1.5"/>' +
            miniGem(dan, 50, 77, 0.3, id);
-      break;
-    case 4: // メダル
-      s += '<path d="M28,4 L44,46 L56,46 L40,4 Z" fill="' + G2.c2 + '" stroke="' + G2.c3 + '" stroke-width="2"/>' +
-           '<path d="M72,4 L56,46 L44,46 L60,4 Z" fill="' + G2.c1 + '" stroke="' + G2.c3 + '" stroke-width="2"/>' +
-           '<circle cx="50" cy="66" r="27" fill="' + au + '" stroke="' + st + '" stroke-width="3"/>' +
-           '<circle cx="50" cy="66" r="20" fill="none" stroke="#fff3b0" stroke-width="2" stroke-dasharray="3 3"/>' +
-           miniGem(dan, 50, 66, 0.3, id);
       break;
     case 5: // ブローチ
       for(var i = 0; i < 8; i++){
@@ -647,71 +958,86 @@ function accessorySVG(dan, ans, id){
       }
       s += '<circle cx="50" cy="52" r="24" fill="' + au + '" stroke="' + st + '" stroke-width="2.5"/>' + miniGem(dan, 50, 52, 0.42, id);
       break;
-    case 6: // つるぎ
-      s += '<g transform="rotate(-30 50 50)">' +
-           '<path d="M50,0 L58,12 L58,62 L42,62 L42,12 Z" fill="' + ag + '" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round"/>' +
-           '<path d="M50,6 L50,58" stroke="#fff" stroke-width="2" opacity=".8"/>' +
-           '<rect x="22" y="61" width="56" height="11" rx="5" fill="' + au + '" stroke="' + st + '" stroke-width="2.5"/>' +
-           '<rect x="44" y="72" width="12" height="18" rx="3" fill="' + G2.c3 + '"/>' +
-           '<circle cx="50" cy="94" r="6" fill="' + au + '" stroke="' + st + '" stroke-width="2"/>' +
-           miniGem(dan, 50, 66.5, 0.17, id) + '</g>';
+    case 6: // ペンダント
+      s += '<path d="M14,10 Q16,58 50,64 Q84,58 86,10" fill="none" stroke="' + st + '" stroke-width="6" stroke-dasharray="0.1 7" stroke-linecap="round"/>' +
+           '<path d="M14,10 Q16,58 50,64 Q84,58 86,10" fill="none" stroke="#ffe27a" stroke-width="3.5" stroke-dasharray="0.1 7" stroke-linecap="round"/>' +
+           '<circle cx="50" cy="64" r="5" fill="' + au + '" stroke="' + st + '" stroke-width="2"/>' +
+           miniGem(dan, 50, 80, 0.36, id);
       break;
-    case 7: // たて
-      s += '<path d="M50,6 L88,18 L84,56 Q76,82 50,96 Q24,82 16,56 L12,18 Z" fill="' + au + '" stroke="' + st + '" stroke-width="3" stroke-linejoin="round"/>' +
-           '<path d="M50,16 L78,25 L75,55 Q69,74 50,85 Q31,74 25,55 L22,25 Z" fill="' + G2.c1 + '" stroke="' + G2.c2 + '" stroke-width="2.5" stroke-linejoin="round"/>' +
-           miniGem(dan, 50, 50, 0.36, id);
+    case 7: // ゆびわ
+      s += '<circle cx="50" cy="64" r="25" fill="none" stroke="' + st + '" stroke-width="12"/>' +
+           '<circle cx="50" cy="64" r="25" fill="none" stroke="' + au + '" stroke-width="8"/>' +
+           '<path d="M38,44 L44,30 M62,44 L56,30" stroke="' + st + '" stroke-width="4" stroke-linecap="round"/>' +
+           miniGem(dan, 50, 30, 0.42, id);
       break;
-    case 8: // まほうのつえ
-      s += '<path d="M20,96 L62,44" stroke="' + st + '" stroke-width="10" stroke-linecap="round"/>' +
-           '<path d="M20,96 L62,44" stroke="' + au + '" stroke-width="6" stroke-linecap="round"/>' +
-           '<path d="M30,84 L36,88 M38,74 L44,78" stroke="' + G2.c2 + '" stroke-width="3" stroke-linecap="round"/>' +
-           '<circle cx="66" cy="34" r="20" fill="none" stroke="' + au + '" stroke-width="4"/>' +
-           miniGem(dan, 66, 34, 0.36, id) +
-           '<path class="twinkle" d="' + star4(26, 22, 8) + '" fill="#fff6c2" stroke="#f5b301" stroke-width="1"/>' +
-           '<path class="twinkle" style="animation-delay:.5s" d="' + star4(92, 66, 6) + '" fill="#fff6c2" stroke="#f5b301" stroke-width="1"/>';
+    case 8: // ティアラ
+      s += '<path d="M8,80 L14,66 L26,40 L36,60 L50,20 L64,60 L74,40 L86,66 L92,80 Q50,64 8,80 Z" fill="' + au + '" stroke="' + st + '" stroke-width="3" stroke-linejoin="round"/>' +
+           '<path d="M8,80 Q50,64 92,80" fill="none" stroke="' + st + '" stroke-width="5" stroke-linecap="round"/>' +
+           '<path d="M8,80 Q50,64 92,80" fill="none" stroke="#fff3b0" stroke-width="2" stroke-linecap="round"/>' +
+           '<circle cx="26" cy="40" r="4.5" fill="' + G2.c2 + '" stroke="' + G2.c3 + '" stroke-width="1.5"/>' +
+           '<circle cx="74" cy="40" r="4.5" fill="' + G2.c2 + '" stroke="' + G2.c3 + '" stroke-width="1.5"/>' +
+           '<circle cx="50" cy="20" r="4" fill="#fff" stroke="' + st + '" stroke-width="1.5"/>' +
+           miniGem(dan, 50, 52, 0.27, id);
       break;
-    default: // 9 おうかん
+    default: // 9 でんせつの おうかん
       s += '<path d="M12,80 L12,30 L32,52 L50,18 L68,52 L88,30 L88,80 Z" fill="' + au + '" stroke="' + st + '" stroke-width="3" stroke-linejoin="round"/>' +
+           '<path d="M18,74 L18,44 L32,60 L50,32 L68,60 L82,44 L82,74 Z" fill="#b91c1c" opacity=".35"/>' +
            '<rect x="10" y="70" width="80" height="16" rx="4" fill="' + au + '" stroke="' + st + '" stroke-width="3"/>' +
            '<circle cx="12" cy="28" r="5" fill="' + au + '" stroke="' + st + '" stroke-width="2"/>' +
            '<circle cx="50" cy="16" r="5" fill="' + au + '" stroke="' + st + '" stroke-width="2"/>' +
            '<circle cx="88" cy="28" r="5" fill="' + au + '" stroke="' + st + '" stroke-width="2"/>' +
            '<circle cx="24" cy="78" r="4.5" fill="' + G2.c2 + '"/><circle cx="76" cy="78" r="4.5" fill="' + G2.c2 + '"/>' +
-           miniGem(dan, 50, 56, 0.28, id);
+           '<circle cx="37" cy="78" r="3" fill="#fff"/><circle cx="63" cy="78" r="3" fill="#fff"/>' +
+           miniGem(dan, 50, 56, 0.28, id) +
+           '<path class="twinkle" d="' + star4(50, 4, 6) + '" fill="#fff6c2" stroke="#f5b301" stroke-width="1"/>';
   }
   return s;
 }
 
-function gemSVG(dan, lv, crack, ans){
+/* 宝石の 絵。lv：-1 なぞの げんせき／0 まだ／1 げんせき／2 あらけずり／3 ピカピカ／4 かんせい
+   opt.black：のろわれた 黒い げんせき（lv1〜3）／opt.rainbow：にじ色の オーラ（lv4） */
+function gemSVG(dan, lv, ans, opt){
+  opt = opt || {};
   var id = 'gm' + (++gemUid);
-  var G2 = GEMS[dan];
+  var G2 = (opt.black && lv < 4) ? BLACK_GEM : GEMS[dan];
   var s = '<svg class="gem" viewBox="0 0 100 100" aria-hidden="true">';
-  if(lv <= 0){
-    s += '<circle cx="50" cy="52" r="40" fill="#efebfa" stroke="#cfc8e6" stroke-width="3" stroke-dasharray="7 6"/>' +
-         '<text x="50" y="66" text-anchor="middle" font-size="40" font-weight="900" fill="#b4abd0">?</text></svg>';
+  if(lv === 0){
+    s += '<circle cx="50" cy="52" r="40" fill="#f1e8cc" stroke="#d6c59a" stroke-width="3" stroke-dasharray="7 6"/>' +
+         '<text x="50" y="66" text-anchor="middle" font-size="40" font-weight="900" fill="#c2ad7c">?</text></svg>';
     return s;
   }
-  var shape = SHAPES[dan];
   s += '<defs>' +
        '<linearGradient id="' + id + 'a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + G2.c1 + '"/><stop offset=".55" stop-color="' + G2.c2 + '"/><stop offset="1" stop-color="' + G2.c3 + '"/></linearGradient>' +
        '<linearGradient id="' + id + 'm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + G2.c2 + '"/><stop offset="1" stop-color="' + G2.c3 + '"/></linearGradient>' +
-       '<linearGradient id="' + id + 'r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c4c9d2"/><stop offset="1" stop-color="#6b7280"/></linearGradient>' +
+       '<linearGradient id="' + id + 'r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + (opt.black ? '#5b5170' : '#c4c9d2') + '"/><stop offset="1" stop-color="' + (opt.black ? '#1c1528' : '#6b7280') + '"/></linearGradient>' +
        '<linearGradient id="' + id + 'au" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3b0"/><stop offset=".5" stop-color="#f5c542"/><stop offset="1" stop-color="#c58a12"/></linearGradient>' +
        '<linearGradient id="' + id + 'ag" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e2e8f0"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#94a3b8"/></linearGradient>' +
+       '<linearGradient id="' + id + 'rb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5e8a"/><stop offset=".2" stop-color="#ffb347"/><stop offset=".4" stop-color="#ffe14d"/><stop offset=".6" stop-color="#5ee7a0"/><stop offset=".8" stop-color="#5aa9ff"/><stop offset="1" stop-color="#b47cff"/></linearGradient>' +
        '<radialGradient id="' + id + 'h"><stop offset="0" stop-color="' + G2.c1 + '" stop-opacity=".95"/><stop offset="1" stop-color="' + G2.c1 + '" stop-opacity="0"/></radialGradient>' +
        '<radialGradient id="' + id + 'g"><stop offset="0" stop-color="#fff7c2"/><stop offset=".6" stop-color="#ffd84d" stop-opacity=".55"/><stop offset="1" stop-color="#ffd84d" stop-opacity="0"/></radialGradient>' +
+       '<radialGradient id="' + id + 'k"><stop offset=".45" stop-color="#7c3aed" stop-opacity=".55"/><stop offset="1" stop-color="#7c3aed" stop-opacity="0"/></radialGradient>' +
+       '<radialGradient id="' + id + 'w"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#ffe6f3" stop-opacity=".8"/><stop offset=".7" stop-color="#d6ecff" stop-opacity=".45"/><stop offset="1" stop-color="#eadcff" stop-opacity="0"/></radialGradient>' +
        '</defs>';
-  if(lv === 1){
-    // げんせき：ごつごつの 石から 宝石が すこし のぞいている
-    var rock = [[10,72],[16,44],[36,26],[62,28],[86,46],[90,74],[64,92],[30,90]];
-    var small = scalePts(shape, 0.42, 62, 36);
+  var rock = [[10,72],[16,44],[36,26],[62,28],[86,46],[90,74],[64,92],[30,90]];
+  if(lv === -1){
+    // なぞの げんせき（まだ ほりだす 前）
     s += '<polygon points="' + ptsStr(rock) + '" fill="url(#' + id + 'r)" stroke="#4b5563" stroke-width="3" stroke-linejoin="round"/>' +
          '<path d="M24,66 L40,58 M54,74 L70,64 M30,46 L42,50" stroke="#4b5563" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>' +
+         '<text x="52" y="70" text-anchor="middle" font-size="36" font-weight="900" fill="#fff" opacity=".9">?</text></svg>';
+    return s;
+  }
+  var shape = SHAPES[dan];
+  if(opt.black && lv < 4) s += '<circle cx="50" cy="52" r="50" fill="url(#' + id + 'k)"/>';
+  if(lv === 1){
+    // げんせき：ごつごつの 石から 宝石が すこし のぞいている
+    var small = scalePts(shape, 0.42, 62, 36);
+    s += '<polygon points="' + ptsStr(rock) + '" fill="url(#' + id + 'r)" stroke="' + (opt.black ? '#0d0716' : '#4b5563') + '" stroke-width="3" stroke-linejoin="round"/>' +
+         '<path d="M24,66 L40,58 M54,74 L70,64 M30,46 L42,50" stroke="' + (opt.black ? '#000' : '#4b5563') + '" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>' +
          '<polygon points="' + ptsStr(small) + '" fill="url(#' + id + 'm)" stroke="' + G2.c3 + '" stroke-width="2.5" stroke-linejoin="round"/>';
   }else if(lv === 2 || lv === 3){
     var inner = scalePts(shape, 0.52);
     if(lv === 3) s += '<circle cx="50" cy="52" r="50" fill="url(#' + id + 'h)"/>';
-    // カット：形と面は できたが、まだ くもっている（こい色・光なし）
+    // あらけずり：形と面は できたが、まだ くもっている（こい色・光なし）
     s += '<polygon points="' + ptsStr(shape) + '" fill="url(#' + id + (lv === 2 ? 'm' : 'a') + ')" stroke="' + G2.c3 + '" stroke-width="3" stroke-linejoin="round"/>';
     var lines = '';
     for(var i = 0; i < shape.length; i++){
@@ -727,74 +1053,117 @@ function gemSVG(dan, lv, crack, ans){
            '<path class="twinkle" style="animation-delay:.9s" d="' + star4(84, 84, 7) + '" fill="#fff" stroke="' + G2.c2 + '" stroke-width="1"/>';
     }
   }else{
-    // アクセサリー：金の 光の うえに、宝石を はめこんだ かざり
-    s += '<circle cx="50" cy="52" r="50" fill="url(#' + id + 'g)"/>' +
-         '<g class="aura">' +
-           '<path d="' + star4(50, 3, 5) + '" fill="#ffd84d"/><path d="' + star4(97, 52, 5) + '" fill="#ffd84d"/>' +
-           '<path d="' + star4(50, 101, 5) + '" fill="#ffd84d"/><path d="' + star4(3, 52, 5) + '" fill="#ffd84d"/>' +
-         '</g>' + accessorySVG(dan, ans || 9, id);
-  }
-  if(crack){
-    s += '<path d="M30,26 L44,44 L36,56 L52,70 L46,86" fill="none" stroke="#2e1065" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>' +
-         '<path d="M30,26 L44,44 L36,56 L52,70 L46,86" fill="none" stroke="#fff" stroke-width="1.4" stroke-linejoin="round" opacity=".8"/>';
+    // かんせい：金の 光の うえに、宝石を はめこんだ アクセサリー
+    if(opt.rainbow){
+      s += '<circle cx="50" cy="52" r="50" fill="url(#' + id + 'w)"/>' +
+           '<g class="aura"><circle cx="50" cy="52" r="47" fill="none" stroke="url(#' + id + 'rb)" stroke-width="3.5" stroke-dasharray="10 5"/>' +
+           '<path d="' + star4(50, 3, 6) + '" fill="#ff5e8a"/><path d="' + star4(97, 52, 6) + '" fill="#5ee7a0"/>' +
+           '<path d="' + star4(50, 101, 6) + '" fill="#5aa9ff"/><path d="' + star4(3, 52, 6) + '" fill="#ffe14d"/></g>';
+    }else{
+      s += '<circle cx="50" cy="52" r="50" fill="url(#' + id + 'g)"/>' +
+           '<g class="aura">' +
+             '<path d="' + star4(50, 3, 5) + '" fill="#ffd84d"/><path d="' + star4(97, 52, 5) + '" fill="#ffd84d"/>' +
+             '<path d="' + star4(50, 101, 5) + '" fill="#ffd84d"/><path d="' + star4(3, 52, 5) + '" fill="#ffd84d"/>' +
+           '</g>';
+    }
+    s += accessorySVG(dan, ans || 9, id);
   }
   s += '</svg>';
   return s;
 }
 
-/* ================= 宝石のルール ================= */
-function cardOf(key){ return gems.cards[key] || { lv:0 }; }
-function saveGems(){ save('gems', gems); }
+/* ================= こうぼう（4日間の 育成）のルール ================= */
+function saveCraft(){ save('craft', craft); }
+function saveZukan(){ save('zukan', zukan); }
+function itemName(dan, ans){ return GEMS[dan].name + 'の ' + ACCS[ans]; }
 
-/* せいかい したときに 宝石を すすめる（1日1だんかいまで）。できごとを かえす */
-function gemCorrect(q, dt, mode){
-  var c = gems.cards[q.key] || { lv:0, d:'', crack:false, fix:0 };
-  var t = today(), ev = null;
-  if(c.crack){
-    c.fix = (c.fix || 0) + 1;
-    if(c.fix >= 2){ c.crack = false; c.fix = 0; ev = { type:'fix', from:c.lv, to:c.lv }; }
-    else ev = { type:'fixing', from:c.lv, to:c.lv };
-  }else if(c.lv === 0){
-    c.lv = 1; c.d = t; ev = { type:'new', from:0, to:1 };
-  }else if(c.d < t){
-    if(c.lv === 1 || c.lv === 2){ ev = { type:'grow', from:c.lv, to:c.lv + 1 }; c.lv++; c.d = t; }
-    else if(c.lv === 3 && mode === 'all' && dt < SLOW_SEC){ ev = { type:'grow', from:3, to:4 }; c.lv = 4; c.d = t; }
+/* きょうの しごとが おわっているか */
+function craftDoneToday(){ return !!(craft && craft.last && craft.last >= today()); }
+/* つぎに やる日（1〜4）。新しい ほうせきから なら 1 */
+function craftNextDay(){ return (!craft || craft.day >= 4) ? 1 : craft.day + 1; }
+
+/* ① ターゲット式（げんせきの しょうたい）を きめる */
+function pickTarget(){
+  // （③で：お客さんの リクエストを うけている ときは、その じょうけんに 合う 式を ここで さいしょに えらぶ）
+  if(Math.random() < BLACK_RATE){
+    var wl = Object.keys(weak).filter(function(k){ return weak[k] >= BLACK_MIN; }).map(parseKey).filter(Boolean);
+    if(wl.length > 0) return { q:weightedPick(wl, function(p){ return weak[p.key]; }), black:true };
   }
-  gems.cards[q.key] = c;
-  saveGems();
-  return ev;
+  // まだ 作って いない 式は、作った 式の 4ばい 出やすい
+  return { q:weightedPick(allQ(), function(p){ return zukan[p.key] ? 1 : 4; }), black:false };
 }
-/* まちがえたとき：もっている 宝石に ひびが 入る（だんかいは きえない） */
-function gemWrong(q){
-  var c = gems.cards[q.key];
-  if(!c || c.lv < 1) return null;
-  var was = c.crack;
-  c.crack = true; c.fix = 0;
-  saveGems();
-  return was ? null : { type:'crack', from:c.lv, to:c.lv };
-}
-function gemStats(){
-  var s = { got:0, lv:[0,0,0,0,0], crack:0, growToday:0 };
-  var t = today();
-  for(var b = 1; b <= 9; b++) for(var n = 1; n <= 9; n++){
-    var c = gems.cards[(b * n) + '÷' + b];
-    var lv = c ? c.lv : 0;
-    s.lv[lv]++;
-    if(lv >= 1) s.got++;
-    if(c && c.crack) s.crack++;
-    if(c && !c.crack && lv >= 1 && lv <= 3 && c.d < t) s.growToday++;
+
+/* ② その日の 4もん（ちょうふく なし）。4もんめは いつも ターゲット式 */
+function dayQuestions(day, t){
+  var used = {}, list = [];
+  used[t.key] = true;
+  function take(cands, n){
+    var c = shuffle(cands.filter(function(p){ return !used[p.key]; })), got = 0;
+    for(var i = 0; i < c.length && got < n; i++){ used[c[i].key] = true; list.push(c[i]); got++; }
+    return got;
   }
+  var sameDan = [], sameAns = [];
+  for(var n = 1; n <= 9; n++) sameDan.push(mkQ(t.b, n));
+  for(var b = 1; b <= 9; b++) if(b !== t.b) sameAns.push(mkQ(b, t.ans));
+  if(day === 1 || day === 4){
+    take(sameDan, 3);                                   // 同じ だんの 式 3もん
+  }else if(day === 2){
+    take(allQ(), 2);                                    // 81しきから 2もん
+    take(sameAns, 1);                                   // 答えが 同じ ほかの だんの 式 1もん
+  }else{
+    var weakC = allQ().filter(function(p){ return (weak[p.key] || 0) >= 1; });
+    var got = take(weakC, 2);                           // にがて（なければ 同じ だん）2もん
+    if(got < 2) take(sameDan, 2 - got);
+    var rv = mkQ(t.ans, t.b);                           // かけ算を ぎゃくに した 式（56÷7 → 56÷8）
+    if(!used[rv.key]){ used[rv.key] = true; list.push(rv); } else take(sameDan, 1);
+  }
+  if(list.length < 3) take(allQ(), 3 - list.length);
+  list = shuffle(list);
+  var tq = mkQ(t.b, t.ans); tq.isTarget = true;
+  list.push(tq);
+  return list;
+}
+
+/* できばえ（★1〜3）：4日間の「1回で せいかい」の 数と、その 平均タイム、3日目の オーラ */
+function craftScore(cr){
+  var c = 0, t = 0;
+  cr.log.forEach(function(l){ c += l.c; t += l.t; });
+  var avg = c > 0 ? t / c : 99;
+  var p = c + (avg < 3 ? 2 : (avg < 5 ? 1 : 0)) + (cr.aura ? 1 : 0);
+  return { ok:c, avg:avg, pts:p, star:(p >= 17 ? 3 : (p >= 13 ? 2 : 1)) };
+}
+
+/* 1日分を おえたときに 1だんかい 進める */
+function craftAdvance(g){
+  var c = 0, t = 0, tgt = null;
+  g.log.forEach(function(l){
+    if(l.miss === 0){ c++; t += l.time; }
+    if(l.isTarget) tgt = l;
+  });
+  craft.day++;
+  craft.last = today();
+  craft.log.push({ c:c, t:Math.round(t * 10) / 10 });
+  if(craft.day === 3 && tgt && tgt.miss === 0 && tgt.time <= FAST3) craft.aura = true;
+  var res = { day:craft.day, ok:c, aura:(craft.day === 3 && craft.aura) };
+  if(craft.day >= 4){
+    var sc = craftScore(craft);
+    var z = zukan[craft.key] || { n:0, star:0, rainbow:false, first:today() };
+    z.n++;
+    z.star = Math.max(z.star || 0, sc.star);
+    if(craft.black) z.rainbow = true;
+    z.date = today();
+    z.last = { star:sc.star, ok:sc.ok, avg:Math.round(sc.avg * 10) / 10, aura:!!craft.aura, black:!!craft.black };
+    zukan[craft.key] = z; saveZukan();
+    res.done = true; res.score = sc; res.isNew = (z.n === 1);
+  }
+  saveCraft();
+  return res;
+}
+
+function zukanStats(){
+  var s = { got:0, rainbow:0, star3:0 };
+  Object.keys(zukan).forEach(function(k){ if(parseKey(k)){ s.got++; if(zukan[k].rainbow) s.rainbow++; if(zukan[k].star >= 3) s.star3++; } });
   return s;
-}
-function nextGoal(q, c){
-  var t = today();
-  if(c.lv === 0) return 'この 問題に せいかいすると、げんせきが 見つかるよ！';
-  if(c.crack) return '💔 ひびが 入っているよ。2回 つづけて せいかいすると なおるよ（いま ' + (c.fix || 0) + '/2）。「にがて とっくん」が おすすめ！';
-  var when = (c.d < t) ? 'きょう' : 'あした いこうに';
-  if(c.lv === 1) return when + ' せいかいすると、✂️ カット されるよ！';
-  if(c.lv === 2) return when + ' せいかいすると、✨ ピカピカに なるよ！';
-  if(c.lv === 3) return when + '「ぜんぶの だん」で ' + SLOW_SEC + 'びょう より はやく せいかいすると、💍「' + itemName(q.b, q.ans) + '」に なるよ！';
-  return '💍 かんせい！「' + itemName(q.b, q.ans) + '」。ひびが 入らないように まもってね。';
 }
 
 /* ================= サウンド ================= */
@@ -868,12 +1237,9 @@ $('muteBtn').addEventListener('click', function(){
   if(!muted) sndBeep(false);
 });
 
-/* ================= タイトル画面 ================= */
+/* ================= フリー練習（いままでの タイトル画面） ================= */
 function tokuPool(){
-  var set = {};
-  Object.keys(weak).forEach(function(k){ if(weak[k] >= 1 && parseKey(k)) set[k] = true; });
-  Object.keys(gems.cards).forEach(function(k){ if(gems.cards[k].crack && parseKey(k)) set[k] = true; });
-  return Object.keys(set).map(parseKey);
+  return Object.keys(weak).filter(function(k){ return weak[k] >= 1 && parseKey(k); }).map(parseKey);
 }
 
 function renderTitle(){
@@ -889,6 +1255,9 @@ function renderTitle(){
     '<span class="rank-badge">' + tt.cur.e + ' ' + tt.cur.t + '</span>' +
     '<span class="rank-info">' + info + '</span>' +
     '<div class="rank-bar"><i style="width:' + Math.max(3, Math.min(100, pct)) + '%"></i></div>';
+  $('freeNote').textContent = craftDoneToday()
+    ? '⚒️ きょうの こうぼうの しごとは おわり！ ここで うでを みがこう'
+    : '⚒️ まずは「こうぼう」で きょうの 4もんを やろう！';
 
   var html = '';
   MODE_ORDER.forEach(function(m){
@@ -896,7 +1265,7 @@ function renderTitle(){
     var bestHtml = (typeof b === 'number')
       ? '<span class="m-best">ベスト<br><b>' + b.toFixed(1) + '</b>びょう</span>'
       : '<span class="m-best none">ベスト<br><b>きろく なし</b></span>';
-    html += '<button class="btn mode ' + m + '" data-mode="' + m + '">' +
+    html += '<button class="btn gbtn mode ' + m + '" data-mode="' + m + '">' +
               '<span class="m-icon">' + md.icon + '</span>' +
               '<span class="m-text"><b>' + md.name + '</b><small>' + md.sub + '</small>' +
               '<span class="stamp">⭐ クリア ' + cl + 'かい</span></span>' +
@@ -913,17 +1282,16 @@ function renderTitle(){
     tb.innerHTML = '<span class="s-title">🔥 にがて とっくん</span><span class="s-info">にがて問題が できたら ひらくよ。<br>いまは にがて なし！ ✨</span>';
   }else{
     var chips = pool.slice(0, 8).map(function(q){
-      var c = gems.cards[q.key];
-      var cls = (c && c.crack) ? 'crack' : ((weak[q.key] || 0) >= 3 ? 'lv3' : '');
-      return '<span class="chip ' + cls + '">' + ((c && c.crack) ? '💔' : '') + q.key + '</span>';
+      var lv3 = (weak[q.key] || 0) >= BLACK_MIN;
+      return '<span class="chip' + (lv3 ? ' lv3' : '') + '">' + (lv3 ? '🖤' : '') + q.key + '</span>';
     }).join('');
     tb.innerHTML = '<span class="s-title">🔥 にがて とっくん</span><span class="s-info">' + pool.length + 'もん ・ まちがえても つづけられるよ</span><span class="chips">' + chips + '</span>';
   }
 
-  var st = gemStats();
-  $('boxBtn').innerHTML = '<span class="s-title">💎 ほうせきばこ</span>' +
-    '<span class="s-info">あつめた ほうせき ' + st.got + ' / 81 ・ 💍' + st.lv[4] + '</span>' +
-    '<span class="s-info today-grow">' + (st.growToday > 0 ? 'きょう そだてられる ほうせき ' + st.growToday + 'こ！' : (st.got === 0 ? 'せいかいして げんせきを 見つけよう！' : 'あした また そだてられるよ')) + '</span>';
+  var done = craftDoneToday();
+  $('boxBtn').innerHTML = '<span class="s-title">⚒️ こうぼう</span>' +
+    '<span class="s-info">' + (done ? '✅ きょうの しごとは おわり' : '⛏️ ' + craftNextDay() + '日目の しごとが まってるよ！') + '</span>' +
+    '<span class="s-info">📖 図かん ' + zukanStats().got + ' / 81</span>';
 }
 
 $('modes').addEventListener('click', function(e){
@@ -931,61 +1299,150 @@ $('modes').addEventListener('click', function(e){
   if(btn) startGame(btn.getAttribute('data-mode'));
 });
 $('tokuBtn').addEventListener('click', function(){ if(tokuPool().length > 0) startGame('toku'); });
-$('boxBtn').addEventListener('click', function(){ openZukan(); });
+$('boxBtn').addEventListener('click', function(){ goTab('home'); });
 
-/* ================= ほうせきばこ ================= */
+/* ================= こうぼう（ホーム） ================= */
+function dayTrack(doneDays, nowDay){
+  var h = '';
+  for(var d = 1; d <= 4; d++){
+    var cls = d <= doneDays ? ' done' : (d === nowDay ? ' now' : '');
+    h += (d > 1 ? '<span class="day-ar">▶</span>' : '') +
+         '<span class="day' + cls + '"><span class="di">' + (d <= doneDays ? '✅' : DAYS[d].i) + '</span>' + d + '日目<br>' + DAYS[d].n + '</span>';
+  }
+  return '<div class="days">' + h + '</div>';
+}
+function renderHome(){
+  var done = craftDoneToday();
+  var fresh = !craft || craft.day === 0 || (craft.day >= 4 && !done);
+  var gemHtml, name, sub, nameCls = '';
+  if(fresh){
+    gemHtml = gemSVG(1, -1);
+    name = '？ なぞの げんせき';
+    sub = 'どんな ほうせきが 出てくるかな？ 4日 かけて アクセサリーに しあげよう！';
+  }else{
+    var q = parseKey(craft.key), lv = craft.day;
+    gemHtml = gemSVG(q.b, lv, q.ans, { black:craft.black, rainbow:craft.black });
+    if(lv >= 4){
+      var z = zukan[craft.key] || {};
+      name = (craft.black ? '🌈 にじ色の ' : '') + itemName(q.b, q.ans);
+      sub = '🎉 かんせい！ できばえ ' + STAR_TXT[(z.last && z.last.star) || 1] + ' ・ 図かんに とうろく したよ。<br>あした 新しい げんせきを ほりに 行こう！';
+    }else{
+      name = (craft.black ? '🖤 のろわれた 黒い ' : '') + GEMS[q.b].name + '<small>' + q.a + ' ÷ ' + q.b + ' の ほうせき</small>';
+      if(craft.black) nameCls = ' black';
+      sub = LV_ICON[lv] + ' いまは「' + LV_NAME[lv] + '」' +
+            (craft.black ? '<br>4日 かけて しあげると、のろいが とけて にじ色に かがやくよ！' : '') +
+            (craft.aura ? '<br>⚡ オーラ ボーナス 〇' : '');
+    }
+  }
+  var shown = fresh ? 0 : craft.day;
+  $('wCard').innerHTML = '<div class="w-gem">' + gemHtml + '</div>' +
+    '<div class="w-name' + nameCls + '">' + name + '</div>' +
+    '<div class="w-sub">' + sub + '</div>' +
+    dayTrack(shown, done ? 0 : craftNextDay());
+
+  var gb = $('goBtn');
+  if(done){
+    gb.className = 'gbtn go-btn done';
+    gb.innerHTML = '✅ きょうは おわり！<small>あした つづきを しよう ・ 🎯 フリー練習で うでを みがけるよ</small>';
+  }else{
+    var nd = craftNextDay();
+    gb.className = 'gbtn go-btn shine';
+    gb.innerHTML = DAYS[nd].i + ' ' + nd + '日目「' + DAYS[nd].n + '」を はじめる<small>' + DAYS[nd].d + ' ・ 4もん（まちがえても だいじょうぶ）</small>';
+  }
+  var st = zukanStats();
+  $('wStats').innerHTML = '<span>📖 図かん ' + st.got + ' / 81</span><span>★★★ ' + st.star3 + '</span>' +
+    (st.rainbow ? '<span>🌈 にじ色 ' + st.rainbow + '</span>' : '') +
+    '<span>' + getTitle(total).cur.e + ' ' + getTitle(total).cur.t + '</span>';
+  renderDbg();
+}
+$('goBtn').addEventListener('click', function(){
+  ensureAudio();
+  if(craftDoneToday()){ sndBeep(false); goTab('title'); return; }
+  startGame('craft');
+});
+
+/* ================= ほうせき図かん（81しゅるい） ================= */
 var zSel = null;
+function cellState(key){
+  var z = zukan[key];
+  if(z) return { kind:'got', z:z };
+  if(craft && craft.key === key && craft.day >= 1 && craft.day < 4) return { kind:'wip', lv:craft.day, black:craft.black };
+  return { kind:'none' };
+}
+function cellGem(q, cs){
+  if(cs.kind === 'got') return gemSVG(q.b, 4, q.ans, { rainbow:cs.z.rainbow });
+  if(cs.kind === 'wip') return gemSVG(q.b, cs.lv, q.ans, { black:cs.black });
+  return gemSVG(q.b, 0, q.ans);
+}
 function openZukan(){
-  showScreen('zukan');
-  var st = gemStats();
+  var st = zukanStats();
   $('zSum').innerHTML =
-    '<span class="main">💎 ' + st.got + ' / 81</span>' +
-    '<span>🪨 げんせき ' + st.lv[1] + '</span><span>✂️ カット ' + st.lv[2] + '</span>' +
-    '<span>✨ ピカピカ ' + st.lv[3] + '</span><span>💍 アクセサリー ' + st.lv[4] + '</span>' +
-    (st.crack ? '<span>💔 ひび ' + st.crack + '</span>' : '');
+    '<span class="main">📖 ' + st.got + ' / 81</span>' +
+    '<span>★★★ パーフェクト ' + st.star3 + '</span>' +
+    '<span>🌈 にじ色 ' + st.rainbow + '</span>';
+  // よこ＝わる数（ほうせきの 色）、たて＝答え（アクセサリーの 形）
   var html = '<div class="z-head">÷</div>';
-  for(var n = 1; n <= 9; n++) html += '<div class="z-head">' + n + '</div>';
   for(var b = 1; b <= 9; b++){
     var comp = true;
-    for(var k = 1; k <= 9; k++){ if(cardOf((b * k) + '÷' + b).lv < 1) comp = false; }
-    html += '<div class="z-row' + (comp ? ' comp' : '') + '" title="' + GEMS[b].name + '">' + (comp ? '👑' : '') + '÷' + b + '</div>';
-    for(var a2 = 1; a2 <= 9; a2++){
-      var key = (b * a2) + '÷' + b, c = cardOf(key);
-      html += '<button class="z-cell lv' + c.lv + '" data-key="' + key + '" aria-label="' + key + '">' + gemSVG(b, c.lv, c.crack, a2) + '</button>';
+    for(var k = 1; k <= 9; k++){ if(!zukan[mkQ(b, k).key]) comp = false; }
+    html += '<div class="z-head" title="' + GEMS[b].name + '"><i style="background:linear-gradient(135deg,' + GEMS[b].c1 + ',' + GEMS[b].c2 + ')"></i>' + (comp ? '👑' : '÷') + b + '</div>';
+  }
+  for(var n = 1; n <= 9; n++){
+    html += '<div class="z-row" title="' + ACCS[n] + '">＝' + n + '</div>';
+    for(var b2 = 1; b2 <= 9; b2++){
+      var q = mkQ(b2, n), cs = cellState(q.key);
+      html += '<button class="z-cell ' + cs.kind + (cs.kind === 'got' && cs.z.rainbow ? ' rb' : '') + '" data-key="' + q.key + '" aria-label="' + q.key + '">' + cellGem(q, cs) + '</button>';
     }
   }
   $('zGrid').innerHTML = html;
   showDetail(zSel || firstKey());
-  sizeZukan();
 }
 function firstKey(){
-  var keys = Object.keys(gems.cards).filter(function(k){ return gems.cards[k].lv >= 1 && parseKey(k); });
+  if(craft && craft.day >= 1 && parseKey(craft.key)) return craft.key;
+  var keys = Object.keys(zukan).filter(parseKey);
   return keys.length ? keys[0] : '1÷1';
 }
 function sizeZukan(){
   var w = $('zWrap'), W = w.clientWidth, H = w.clientHeight;
-  var cs = Math.floor(Math.min((W - 12 - 30) / 10.25, (H - 12 - 30) / 10));
+  if(!W || !H) return;
+  var cs = Math.floor(Math.min((W - 12 - 30) / 10.25, (H - 12 - 30) / 10.4));
   cs = Math.max(22, Math.min(64, cs));
   $('zGrid').style.setProperty('--cs', cs + 'px');
 }
 function showDetail(key){
   zSel = key;
   var q = parseKey(key); if(!q) return;
-  var c = cardOf(key);
+  var cs = cellState(key);
   var cells = document.querySelectorAll('.z-cell');
   for(var i = 0; i < cells.length; i++) cells[i].classList.toggle('sel', cells[i].getAttribute('data-key') === key);
+  var opt = cs.kind === 'got' ? { rainbow:cs.z.rainbow } : (cs.kind === 'wip' ? { black:cs.black } : {});
+  var now = cs.kind === 'got' ? 4 : (cs.kind === 'wip' ? cs.lv : 0);
   var path = '';
   for(var lv = 1; lv <= 4; lv++){
     path += (lv > 1 ? '<span class="zp-arrow">▶</span>' : '') +
-      '<span class="zp-step' + (lv === c.lv ? ' now' : (lv < c.lv ? ' done' : '')) + '">' + gemSVG(q.b, lv, false, q.ans) +
+      '<span class="zp-step' + (lv === now ? ' now' : (lv < now ? ' done' : '')) + '">' + gemSVG(q.b, lv, q.ans, opt) +
       '<small>' + (lv === 4 ? ACCS[q.ans] : LV_NAME[lv]) + '</small></span>';
   }
-  var title = c.lv >= 4 ? itemName(q.b, q.ans) : GEMS[q.b].name;
-  $('zDetail').innerHTML = '<div class="zd-main">' + gemSVG(q.b, c.lv, c.crack, q.ans) +
+  var title, lvTxt, note;
+  if(cs.kind === 'got'){
+    title = (cs.z.rainbow ? '🌈 ' : '') + itemName(q.b, q.ans);
+    lvTxt = 'できばえ <span style="color:#e09b12">' + STAR_TXT[cs.z.star] + '</span> ' + STAR_NAME[cs.z.star] + (cs.z.rainbow ? ' ・ にじ色の オーラ' : '');
+    note = '作った かず：' + cs.z.n + 'こ ・ さいしょに 作った 日：' + (cs.z.first || cs.z.date) +
+           (cs.z.star < 3 ? '<br>また 出会えたら ★★★を めざそう！' : '');
+  }else if(cs.kind === 'wip'){
+    title = (cs.black ? '🖤 のろわれた 黒い ' : '') + GEMS[q.b].name;
+    lvTxt = '⚒️ こうぼうで 作っている ところ（' + cs.lv + '日目まで おわり）';
+    note = 'かんせいすると「' + itemName(q.b, q.ans) + '」に なるよ！';
+  }else{
+    title = GEMS[q.b].name + '（' + GEMS[q.b].col + '）';
+    lvTxt = 'まだ 出会って いないよ';
+    note = '答えが ' + q.ans + ' の 式は「' + ACCS[q.ans] + '」に なるよ。こうぼうで 出会えるかも！';
+  }
+  $('zDetail').innerHTML = '<div class="zd-main">' + cellGem(q, cs) +
     '<div class="zd-text">' +
-      '<div class="zd-q">' + q.a + ' ÷ ' + q.b + (c.lv >= 1 ? ' ＝ ' + q.ans : ' ＝ ？') + '</div>' +
-      '<div class="zd-lv">' + title + ' ・ ' + LV_ICON[c.lv] + ' ' + LV_NAME[c.lv] + ' <span style="color:#f5b301">' + LV_STARS[c.lv] + '</span>' + (c.crack ? ' 💔' : '') + '</div>' +
-      '<div class="zd-next">' + nextGoal(q, c) + '</div>' +
+      '<div class="zd-q">' + q.a + ' ÷ ' + q.b + (cs.kind === 'got' ? ' ＝ ' + q.ans : ' ＝ ？') + '</div>' +
+      '<div class="zd-lv">' + title + '</div>' +
+      '<div class="zd-next">' + lvTxt + '<br>' + note + '</div>' +
     '</div></div>' +
     '<div class="zd-path">' + path + '</div>';
 }
@@ -993,22 +1450,90 @@ $('zGrid').addEventListener('click', function(e){
   var cell = e.target.closest('.z-cell');
   if(cell){ ensureAudio(); showDetail(cell.getAttribute('data-key')); sndBeep(false); }
 });
-$('zBack').addEventListener('click', function(){ renderTitle(); showScreen('title'); });
 
-var resetArm = false, resetTimer = null;
-$('weakReset').addEventListener('click', function(){
-  var btn = $('weakReset');
-  if(!resetArm){
-    resetArm = true; btn.textContent = 'ほんとうに けす？'; btn.classList.add('arm');
-    clearTimeout(resetTimer);
-    resetTimer = setTimeout(function(){ resetArm = false; btn.textContent = 'にがて きろくを リセット'; btn.classList.remove('arm'); }, 3000);
-  }else{
-    clearTimeout(resetTimer); resetArm = false;
-    weak = {}; save('weak', weak);
-    btn.textContent = 'けしました ✓'; btn.classList.remove('arm');
-    setTimeout(function(){ btn.textContent = 'にがて きろくを リセット'; }, 1500);
+/* ================= マイほうせき店（③で かざりつけ・お客さんを ふやす） ================= */
+function renderShop(){
+  var keys = Object.keys(zukan).filter(parseKey);
+  keys.sort(function(a, b){ return String(zukan[b].date).localeCompare(String(zukan[a].date)); });
+  $('sSign').textContent = '💎 ほうせき店 ・ ' + keys.length + 'こ ならんでるよ';
+  if(keys.length === 0){
+    $('sCase').innerHTML = '<div class="s-empty">まだ ショーケースは からっぽ。<br>こうぼうで 4日 かけて アクセサリーを しあげると、ここに ならぶよ！</div>';
+    return;
   }
+  $('sCase').innerHTML = keys.map(function(k){
+    var q = parseKey(k), z = zukan[k];
+    return '<button class="s-item" data-key="' + k + '">' + gemSVG(q.b, 4, q.ans, { rainbow:z.rainbow }) +
+           '<span>' + STAR_TXT[z.star] + '</span><span>' + ACCS[q.ans] + '</span></button>';
+  }).join('');
+}
+$('sCase').addEventListener('click', function(e){
+  var it = e.target.closest('.s-item');
+  if(it){ ensureAudio(); sndBeep(false); zSel = it.getAttribute('data-key'); goTab('zukan'); }
 });
+
+/* ================= メニュー ================= */
+$('nav').addEventListener('click', function(e){
+  var b = e.target.closest('.nav-btn');
+  if(!b) return;
+  ensureAudio(); sndBeep(false);
+  goTab(b.getAttribute('data-tab'));
+});
+
+/* ================= おとなの 人の せってい（⚙を 1びょう 長おし） ================= */
+var gearTimer = null, gearLong = false;
+function renderDbg(){
+  var t = $('dbgTag');
+  t.textContent = dayOffset ? '[デバッグ] +' + dayOffset + '日 （' + today() + '）' : '';
+  t.classList.toggle('show', !!dayOffset);
+}
+function openSettings(){
+  $('setDate').innerHTML = 'ほんとうの 日づけ：' + realToday() + '<br>アプリの 中の 日づけ：' + today() + (dayOffset ? '（+' + dayOffset + '日）' : '');
+  $('setModal').classList.add('show');
+}
+function gearDown(e){
+  e.preventDefault();
+  gearLong = false;
+  clearTimeout(gearTimer);
+  gearTimer = setTimeout(function(){ gearLong = true; ensureAudio(); sndBeep(true); openSettings(); }, 1000);
+}
+function gearUp(){
+  clearTimeout(gearTimer);
+  if(!gearLong){
+    var tip = $('gearTip'); tip.classList.add('show');
+    setTimeout(function(){ tip.classList.remove('show'); }, 1600);
+  }
+}
+$('gearBtn').addEventListener('pointerdown', gearDown);
+$('gearBtn').addEventListener('pointerup', gearUp);
+$('gearBtn').addEventListener('pointerleave', function(){ clearTimeout(gearTimer); });
+$('setClose').addEventListener('click', function(){ $('setModal').classList.remove('show'); goTab('home'); });
+$('dbgNext').addEventListener('click', function(){
+  dayOffset++; save('dayOffset', dayOffset); sndBeep(true); openSettings(); renderDbg();
+});
+$('dbgReset').addEventListener('click', function(){
+  dayOffset = 0; save('dayOffset', dayOffset);
+  // 進めた 日づけで プレイした きろくが「みらい」に ならないように
+  if(craft && craft.last > today()){ craft.last = ''; saveCraft(); }
+  sndBeep(false); openSettings(); renderDbg();
+});
+function armButton(id, label, action){
+  var arm = false, timer = null;
+  $(id).addEventListener('click', function(){
+    var btn = $(id);
+    if(!arm){
+      arm = true; btn.textContent = 'ほんとうに けす？（もう一度 おす）'; btn.classList.add('arm');
+      clearTimeout(timer);
+      timer = setTimeout(function(){ arm = false; btn.textContent = label; btn.classList.remove('arm'); }, 3000);
+    }else{
+      clearTimeout(timer); arm = false;
+      action();
+      btn.textContent = 'けしました ✓'; btn.classList.remove('arm');
+      setTimeout(function(){ btn.textContent = label; }, 1500);
+    }
+  });
+}
+armButton('weakReset', 'にがて きろくを リセット', function(){ weak = {}; save('weak', weak); });
+armButton('craftReset', 'こうぼう・図かんの きろくを リセット', function(){ craft = null; zukan = {}; saveCraft(); saveZukan(); zSel = null; });
 
 /* ================= 出題 ================= */
 var G = null;
@@ -1030,7 +1555,9 @@ function weightedPick(list, wfn){
 }
 function makeQuestion(){
   var q = null;
-  if(G.mode === 'toku'){
+  if(G.mode === 'craft'){
+    q = G.list[G.count];
+  }else if(G.mode === 'toku'){
     if(G.pool.length < 3 && G.count % 2 === 1){
       // にがて問題が すくないときは、1もんおきに ほかの問題を まぜる
       var inPool = {};
@@ -1044,7 +1571,7 @@ function makeQuestion(){
     }else{
       var pool = G.pool.filter(function(p){ return p.key !== G.prevKey; });
       if(pool.length === 0) pool = G.pool;
-      q = weightedPick(pool, function(p){ var c = gems.cards[p.key]; return (weak[p.key] || 0) + ((c && c.crack) ? 3 : 0) + 1; });
+      q = weightedPick(pool, function(p){ return (weak[p.key] || 0) + 1; });
     }
   }else{
     var divs = MODES[G.mode].divs;
@@ -1062,15 +1589,18 @@ function makeQuestion(){
       }while(q.key === G.prevKey && guard < 50);
     }
   }
+  var isTarget = !!q.isTarget;
   q = { a:q.a, b:q.b, ans:q.ans, key:q.key };
+  q.isTarget = isTarget;
   q.isWeak = (weak[q.key] || 0) >= 1;
-  var gc = gems.cards[q.key];
-  q.isCrack = !!(gc && gc.crack);
   q.choices = makeChoices(q);
   q.miss = 0;
   return q;
 }
+/* 苦手度スコア：1回めの 答えで きめる（まちがい+5、5びょう以上+2、3びょう以内−2、さいしょうは 0） */
+function weakDelta(dt){ return dt >= SLOW5 ? W_SLOW : (dt <= FAST3 ? W_FAST : 0); }
 function addWeak(key, delta){
+  if(!delta) return;
   var v = Math.max(0, (weak[key] || 0) + delta);
   if(v === 0) delete weak[key]; else weak[key] = v;
   save('weak', weak);
@@ -1145,34 +1675,46 @@ function updateComboSmall(){
 function startGame(mode){
   ensureAudio();
   stopGame();
-  var isToku = (mode === 'toku');
+  var isToku = (mode === 'toku'), isCraft = (mode === 'craft');
   var pool = isToku ? tokuPool() : null;
-  if(isToku && pool.length === 0){ renderTitle(); showScreen('title'); return; }
+  if(isToku && pool.length === 0){ goTab('title'); return; }
+  var list = null, cday = 0;
+  if(isCraft){
+    if(craftDoneToday()){ goTab('home'); return; }
+    if(!craft || craft.day >= 4){
+      var tg = pickTarget();
+      craft = { key:tg.q.key, black:tg.black, day:0, last:'', log:[], aura:false, start:today() };
+      saveCraft();
+    }
+    cday = craft.day + 1;
+    list = dayQuestions(cday, parseKey(craft.key));
+  }
   G = {
     mode:mode, count:0, combo:0, maxCombo:0, start:0, q:null, qStart:0,
     log:[], lock:true, prevKey:null, finished:false, elapsed:0,
-    total: isToku ? (pool.length < 3 ? 6 : Math.min(TOTAL_Q, pool.length * 3)) : TOTAL_Q,
-    pool:pool,
-    ghostT:(!isToku && typeof best[mode] === 'number') ? best[mode] : null,
+    total: isCraft ? list.length : (isToku ? (pool.length < 3 ? 6 : Math.min(TOTAL_Q, pool.length * 3)) : TOTAL_Q),
+    pool:pool, list:list, cday:cday,
+    ghostT:(!isToku && !isCraft && typeof best[mode] === 'number') ? best[mode] : null,
     titleBefore:getTitle(total).cur.t, timers:[], raf:0, feverTimer:null,
-    gemEvents:{}, missQ:null
+    missQ:null, craftRes:null
   };
   var game = G;
   showScreen('play');
   document.body.classList.remove('fever');
   $('feverBadge').classList.remove('show');
   $('weakBadge').classList.remove('show');
-  $('crackBadge').classList.remove('show');
+  $('targetBadge').classList.remove('show');
   $('timer').textContent = '0.0';
   $('qnum').textContent = '1';
   $('qtotal').textContent = G.total;
   $('meFill').style.width = '0%';
   $('ghFill').style.width = '0%';
   $('ghostLane').classList.toggle('empty', !G.ghostT);
-  $('ghostLane').classList.toggle('hide', isToku);
+  $('ghostLane').classList.toggle('hide', isToku || isCraft);
   var rn = $('ruleNote');
-  rn.className = 'rule-note' + (isToku ? ' toku' : '');
-  rn.textContent = isToku ? '🔥 とっくん：まちがえても ヒントで もう一回 ちょうせん できるよ' : '⚠️ 1もん でも まちがえたら おわり！ よく 見て スパッと こたえよう';
+  rn.className = 'rule-note' + (isToku ? ' toku' : (isCraft ? ' craft' : ''));
+  rn.textContent = isCraft ? DAYS[cday].i + ' ' + cday + '日目「' + DAYS[cday].n + '」：4もんめが ほうせきの 問題。まちがえても ヒントで もう一回 できるよ'
+    : (isToku ? '🔥 とっくん：まちがえても ヒントで もう一回 ちょうせん できるよ' : '⚠️ 1もん でも まちがえたら おわり！ よく 見て スパッと こたえよう');
   $('hint').textContent = ''; $('hint').className = 'hint';
   $('formula').innerHTML = '<span class="qm">？</span><span class="op">÷</span><span class="qm">？</span>';
   $('blocks').innerHTML = '';
@@ -1187,7 +1729,7 @@ function startGame(mode){
     if(G !== game) return;
     if(i < seq.length){
       cd.classList.toggle('small', i === 3);
-      cd.innerHTML = '<span>' + seq[i] + '</span>' + (i === 0 ? '<div class="cd-rule">' + (isToku ? '🔥 にがて とっくん' : '⚠️ 1もん まちがえたら おわり') + '</div>' : '');
+      cd.innerHTML = '<span>' + seq[i] + '</span>' + (i === 0 ? '<div class="cd-rule">' + (isCraft ? DAYS[cday].i + ' ' + cday + '日目 ' + DAYS[cday].n : (isToku ? '🔥 にがて とっくん' : '⚠️ 1もん まちがえたら おわり')) + '</div>' : '');
       sndBeep(i === 3);
       i++;
       game.timers.push(setTimeout(step, i === 1 ? 900 : (i === 4 ? 520 : 620)));
@@ -1229,8 +1771,10 @@ function nextQuestion(){
   f.innerHTML = '<span>' + q.a + '</span><span class="op">÷</span><span>' + q.b + '</span><span class="op">＝</span><span class="qm" id="qm">？</span>';
   f.classList.remove('shake');
   restart(f, 'enter');
-  $('weakBadge').classList.toggle('show', q.isWeak && !q.isCrack);
-  $('crackBadge').classList.toggle('show', q.isCrack);
+  $('weakBadge').classList.toggle('show', q.isWeak && !q.isTarget);
+  var tb = $('targetBadge');
+  tb.textContent = (G.cday === 3) ? '💎 ほうせきの 問題！ 3びょう いないで ⚡オーラ' : '💎 ほうせきの 問題！';
+  tb.classList.toggle('show', q.isTarget);
   $('hint').textContent = ''; $('hint').className = 'hint';
   renderBlocks(q);
   $('choices').classList.remove('locked');
@@ -1243,24 +1787,11 @@ function nextQuestion(){
   G.qStart = performance.now();
 }
 
-function recordGemEvent(key, ev){
-  if(!ev || ev.type === 'fixing') return;
-  var old = G.gemEvents[key];
-  if(old){ old.to = ev.to; if(ev.type === 'fix' || ev.type === 'crack') old.type = ev.type; }
-  else G.gemEvents[key] = { key:key, type:ev.type, from:ev.from, to:ev.to };
-}
-function showToast(q, ev){
-  if(!ev) return;
-  var c = cardOf(q.key), txt;
-  if(ev.type === 'new') txt = '🪨 げんせき 見つけた！';
-  else if(ev.type === 'grow') txt = (ev.to === 2 ? '✂️ カット！' : ev.to === 3 ? '✨ ピカピカに なった！' : '💍 ' + ACCS[q.ans] + 'に なった！');
-  else if(ev.type === 'fix') txt = '🔧 ひびが なおった！';
-  else if(ev.type === 'fixing') txt = '🔧 ひび なおし 1/2';
-  else return;
+function showToast(q, txt, lv){
   var el = $('toast');
-  el.innerHTML = gemSVG(q.b, c.lv, c.crack, q.ans) + '<span>' + txt + '</span>';
+  el.innerHTML = gemSVG(q.b, lv, q.ans, { black:craft && craft.black }) + '<span>' + txt + '</span>';
   restart(el, 'pop');
-  if(ev.type !== 'fixing') sndGem();
+  sndGem();
 }
 
 function answer(idx){
@@ -1285,17 +1816,18 @@ function answer(idx){
     G.count++;
     total++; save('total', total);
 
-    if(q.miss === 0){ addWeak(q.key, dt >= SLOW_SEC ? +1 : -1); }
-    G.log.push({ a:q.a, b:q.b, ans:q.ans, key:q.key, miss:q.miss, time:dt });
-
-    // まちがえた あとの せいかい（とっくん）では、宝石は すすまない
-    var ev = (q.miss === 0) ? gemCorrect(q, dt, G.mode) : null;
-    recordGemEvent(q.key, ev);
+    if(q.miss === 0){ addWeak(q.key, weakDelta(dt)); }
+    G.log.push({ a:q.a, b:q.b, ans:q.ans, key:q.key, miss:q.miss, time:dt, isTarget:q.isTarget });
 
     sndCorrect(G.combo);
     sndSlice();
     splitBlocks(q);
-    showToast(q, ev);
+    if(G.mode === 'craft' && q.isTarget){
+      var lvNow = Math.min(craft.day + 1, 4);
+      if(G.cday === 3 && q.miss === 0 && dt <= FAST3) showToast(q, '⚡ オーラ ボーナス！', lvNow);
+      else if(G.cday === 1) showToast(q, 'げんせきの しょうたいは ' + q.key + '！', lvNow);
+      else showToast(q, '💎 ほうせきの 問題 クリア！', lvNow);
+    }
     var h = $('hint');
     h.className = 'hint good';
     h.textContent = '○ せいかい！ ' + q.b + 'こずつ わけると ' + q.ans + 'つ に なるね';
@@ -1311,7 +1843,7 @@ function answer(idx){
       cancelAnimationFrame(G.raf);
       $('timer').textContent = fmt(G.elapsed);
       var game = G;
-      game.timers.push(setTimeout(function(){ if(G === game) finishGame(game.mode === 'toku' ? 'toku' : 'clear'); }, 900));
+      game.timers.push(setTimeout(function(){ if(G === game) finishGame(game.mode === 'toku' ? 'toku' : (game.mode === 'craft' ? 'craft' : 'clear')); }, game.mode === 'craft' ? 1500 : 900));
     }else{
       var g2 = G;
       G.timers.push(setTimeout(function(){ if(G === g2 && !g2.finished) nextQuestion(); }, 480));
@@ -1323,16 +1855,13 @@ function answer(idx){
     btn.querySelector('.mark').textContent = '×';
     sndWrong();
     restart($('formula'), 'shake');
-    if(q.miss === 0){
-      addWeak(q.key, +2);
-      recordGemEvent(q.key, gemWrong(q));
-    }
+    if(q.miss === 0) addWeak(q.key, W_MISS);
     q.miss++;
     G.combo = 0;
     updateComboSmall();
     setFever(false);
 
-    if(G.mode === 'toku'){
+    if(G.mode === 'toku' || G.mode === 'craft'){
       var hint = $('hint');
       hint.className = 'hint';
       if(q.miss === 1){
@@ -1403,19 +1932,14 @@ function confetti(n){
 }
 
 /* ================= リザルト ================= */
-function gemCardHTML(e){
-  var q = parseKey(e.key);
-  var c = cardOf(e.key);
-  var label;
-  if(e.type === 'new') label = 'GET!';
-  else if(e.type === 'grow') label = (e.to === 4 ? ACCS[q.ans] : LV_NAME[e.to]) + '！';
-  else label = 'なおった！';
-  var before = (e.type === 'new')
+/* めくりカード（まえの すがた → きょうの すがた） */
+function craftCardHTML(q, from, to, black){
+  var before = (from <= 0)
     ? '<div class="gface pack">💎<small>タッチ</small></div>'
-    : '<div class="gface lv' + e.from + '">' + gemSVG(q.b, e.from, e.type === 'fix', q.ans) + '<span>' + q.key + '</span><small>タッチ</small></div>';
-  var after = '<div class="gface after lv' + c.lv + '">' + gemSVG(q.b, c.lv, c.crack, q.ans) +
-              '<span>' + q.key + '</span><span>' + label + '</span><span class="st">' + LV_STARS[c.lv] + '</span></div>';
-  return '<div class="gcard" data-key="' + e.key + '"><div class="gcard-in">' + before + after + '</div></div>';
+    : '<div class="gface lv' + Math.min(from, 3) + '">' + gemSVG(q.b, from, q.ans, { black:black }) + '<span>' + q.key + '</span><small>タッチ</small></div>';
+  var after = '<div class="gface after lv' + Math.min(to + 1, 4) + '">' + gemSVG(q.b, to, q.ans, { black:black, rainbow:black }) +
+              '<span>' + q.key + '</span><span>' + (to >= 4 ? ACCS[q.ans] : LV_NAME[to]) + '！</span></div>';
+  return '<div class="gcard" data-key="' + q.key + '"><div class="gcard-in">' + before + after + '</div></div>';
 }
 
 function finishGame(kind){
@@ -1427,7 +1951,32 @@ function finishGame(kind){
   var rt = $('rTitle');
   var isNew = false, prev = best[g.mode];
   $('rMiss').classList.remove('show');
-  if(kind === 'clear'){
+  $('rDone').classList.remove('show');
+  var showGem = (kind === 'craft');
+  $('rGemHead').style.display = $('rGems').style.display = $('rGnote').style.display = showGem ? '' : 'none';
+  if(kind === 'craft'){
+    var res = craftAdvance(g), cq = parseKey(craft.key);
+    g.craftRes = res;
+    rt.className = 'r-title craft';
+    rt.textContent = res.done ? '💍 かんせい！' : DAYS[res.day].i + ' ' + res.day + '日目 ' + DAYS[res.day].n + ' クリア！';
+    $('rTime').textContent = res.ok; $('rUnit').textContent = '/ 4もん 1回で せいかい';
+    $('rSub').textContent = res.done ? '4日間 おつかれさま！' :
+      (res.day === 1 && craft.black ? '😱 のろわれた 黒い げんせき だった！ 4日 かけて しあげると、にじ色に かがやくよ。'
+       : (res.aura ? '⚡ 3びょう いないで 答えて オーラ ボーナス！ ' : '') + 'あしたは ' + (res.day + 1) + '日目「' + DAYS[res.day + 1].n + '」だよ。');
+    if(res.done){
+      var rd = $('rDone');
+      rd.className = 'r-done show' + (craft.black ? ' rainbow' : '');
+      rd.innerHTML = '<div class="rd-name">' + (craft.black ? '🌈 にじ色の ' : '') + itemName(cq.b, cq.ans) + '</div>' +
+        '<div class="rd-star">' + STAR_TXT[res.score.star] + '</div>' +
+        '<div class="rd-note">できばえ「' + STAR_NAME[res.score.star] + '」 ・ ' + cq.a + ' ÷ ' + cq.b + ' ＝ ' + cq.ans +
+        ' ・ ' + (res.isNew ? '📖 図かんに 新しく とうろく！' : '📖 図かんの きろくを 書きかえたよ') +
+        (craft.black ? '<br>のろいが とけて、にじ色の オーラを まとったよ！' : '') + '</div>';
+    }
+    $('rGemHead').textContent = '💎 きょうの ほうせき';
+    $('rGems').className = 'r-gems one';
+    $('rGems').innerHTML = craftCardHTML(cq, res.day - 1, res.day, craft.black);
+    $('rGnote').textContent = 'カードを タッチして めくろう！';
+  }else if(kind === 'clear'){
     var t = Math.round(g.elapsed * 10) / 10;
     isNew = (typeof prev !== 'number') || t < prev;
     if(isNew){ best[g.mode] = t; save('best', best); }
@@ -1462,25 +2011,6 @@ function finishGame(kind){
   if(after.t !== g.titleBefore){ ru.textContent = '🏅 しょうごう アップ！「' + after.e + ' ' + after.t + '」'; ru.classList.add('show'); }
   else ru.classList.remove('show');
 
-  // 宝石カード
-  var evs = Object.keys(g.gemEvents).map(function(k){ return g.gemEvents[k]; });
-  var order = { grow:0, 'new':1, fix:2, crack:3 };
-  evs.sort(function(x, y){ return (order[x.type] - order[y.type]) || (y.to - x.to); });
-  var shown = evs.filter(function(e){ return e.type !== 'crack'; });
-  var cracks = evs.filter(function(e){ return e.type === 'crack'; });
-  var MAXG = 6;
-  $('rGems').innerHTML = shown.slice(0, MAXG).map(gemCardHTML).join('');
-  var note = '';
-  if(shown.length > MAXG) note += 'ほか ' + (shown.length - MAXG) + 'こ。';
-  if(shown.length === 0 && cracks.length === 0){
-    var st = gemStats();
-    note += st.growToday > 0 ? 'きょう まだ そだてられる ほうせきが ' + st.growToday + 'こ あるよ！' : 'あした また せいかいすると、ほうせきが そだつよ！';
-  }else if(shown.length > 0){
-    note += 'カードを タッチして めくろう！';
-  }
-  if(cracks.length > 0) note += ' 💔 ひびが 入った：' + cracks.map(function(e){ return e.key; }).join('・') + '（とっくんで なおそう）';
-  $('rGnote').textContent = note;
-
   // ふりかえり
   var fb = g.log.filter(function(l){ return l.miss > 0 || l.time >= SLOW_SEC; });
   var box = $('rFb');
@@ -1501,10 +2031,11 @@ function finishGame(kind){
     box.innerHTML = html;
   }
 
-  $('againBtn').textContent = (kind === 'toku') ? (tokuPool().length ? '🔁 もういちど とっくん' : '🏠 モードを えらぶ') : '🔁 もういちど ちょうせん';
+  $('againBtn').textContent = (kind === 'craft') ? '🎯 フリー練習へ' : ((kind === 'toku') ? (tokuPool().length ? '🔁 もういちど とっくん' : '🎯 モードを えらぶ') : '🔁 もういちど ちょうせん');
+  $('toTitleBtn').textContent = (kind === 'craft') ? '⚒️ こうぼうへ' : '🎯 フリー練習へ';
 
   if(kind === 'over'){ sndOver(); }
-  else { sndClear(); confetti(isNew ? 90 : 30); }
+  else { sndClear(); confetti((isNew || (g.craftRes && g.craftRes.done)) ? 90 : 30); }
 }
 
 $('rGems').addEventListener('click', function(e){
@@ -1513,11 +2044,11 @@ $('rGems').addEventListener('click', function(e){
 });
 $('againBtn').addEventListener('click', function(){
   if(!G) return;
-  if(G.mode === 'toku' && tokuPool().length === 0){ renderTitle(); showScreen('title'); return; }
+  if(G.mode === 'craft' || (G.mode === 'toku' && tokuPool().length === 0)){ goTab('title'); return; }
   startGame(G.mode);
 });
-$('toTitleBtn').addEventListener('click', function(){ stopGame(); renderTitle(); showScreen('title'); });
-$('quitBtn').addEventListener('click', function(){ stopGame(); renderTitle(); showScreen('title'); });
+$('toTitleBtn').addEventListener('click', function(){ var m = G && G.mode; stopGame(); goTab(m === 'craft' ? 'home' : 'title'); });
+$('quitBtn').addEventListener('click', function(){ var m = G && G.mode; stopGame(); goTab(m === 'craft' ? 'home' : 'title'); });
 $('choices').addEventListener('click', function(e){
   var b = e.target.closest('.choice');
   if(b) answer(parseInt(b.getAttribute('data-i'), 10));
@@ -1537,7 +2068,7 @@ document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 
 /* ================= はじめ ================= */
 renderMute();
-renderTitle();
+goTab('home');
 })();
 </script>
 </body>
