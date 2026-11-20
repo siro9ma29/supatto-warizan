@@ -509,6 +509,9 @@ body.fever::before{display:none;}
   background:linear-gradient(135deg,#2ecc71,#138d4b);text-shadow:0 2px 0 rgba(0,0,0,.3);}
 .go-btn small{display:block;font-size:.55em;opacity:.95;}
 .go-btn.done{background:linear-gradient(135deg,#55549a,#34336f);}
+.go-btn.to-mine{background:linear-gradient(135deg,#2ecc71,#138d4b);}
+.mine-card{background:linear-gradient(180deg,#f3e3c3,#d9b98a);}
+.w-empty{font-size:clamp(15px,3vmin,22px);font-weight:900;color:#5a3d12;text-align:center;line-height:1.6;}
 .w-stats{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
 .w-bench{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 6px;-webkit-overflow-scrolling:touch;}
 .bench-it{flex:0 0 auto;width:clamp(64px,12vmin,84px);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border-radius:14px;
@@ -607,11 +610,25 @@ body.fever::before{display:none;}
 
   <button id="muteBtn" aria-label="おとの オン・オフ">🔊</button>
 
-  <!-- ===== こうぼう（ホーム） ===== -->
+  <!-- ===== はっくつば（新しい げんせきを ほる・1日目） ===== -->
+  <section id="mine" class="screen">
+    <div class="w-head">
+      <div class="w-title"><b>⛏️ はっくつば</b><small>げんせきは 1日に いくつでも ほれるよ</small></div>
+    </div>
+    <div class="w-main">
+      <div class="w-card frame mine-card" id="mCard"></div>
+      <div class="w-side">
+        <button class="gbtn go-btn shine" id="mGo"></button>
+        <div class="w-stats" id="mStats"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== こうぼう（ほりだした げんせきを 2〜4日目で そだてる） ===== -->
   <section id="home" class="screen active">
     <div class="w-head">
       <button id="gearBtn" aria-label="おとなの 人の せってい">⚙</button>
-      <div class="w-title"><b>💎 まほうの ほうせき こうぼう</b><small>スパッと！わり算マスター ・ 1日 4もんで 1だんかい そだつ<span class="ver-badge" id="verBadge">v3.0</span></small></div>
+      <div class="w-title"><b>💎 まほうの ほうせき こうぼう</b><small>スパッと！わり算マスター ・ 1日 4もんで 1だんかい そだてよう<span class="ver-badge" id="verBadge">v3.0</span></small></div>
     </div>
     <div class="w-main">
       <div class="w-card frame" id="wCard"></div>
@@ -722,9 +739,10 @@ body.fever::before{display:none;}
 
   <!-- ===== メニュー ===== -->
   <nav id="nav" class="show">
+    <button class="gbtn nav-btn" data-tab="mine"><span class="ni">⛏️</span>はっくつ</button>
     <button class="gbtn nav-btn on" data-tab="home"><span class="ni">⚒️</span>こうぼう</button>
-    <button class="gbtn nav-btn" data-tab="zukan"><span class="ni">📖</span>ほうせき図かん</button>
-    <button class="gbtn nav-btn" data-tab="shop"><span class="ni">🏪</span>マイほうせき店</button>
+    <button class="gbtn nav-btn" data-tab="zukan"><span class="ni">📖</span>図かん</button>
+    <button class="gbtn nav-btn" data-tab="shop"><span class="ni">🏪</span>お店</button>
     <button class="gbtn nav-btn" data-tab="title"><span class="ni">🎯</span>フリー練習</button>
   </nav>
 </div>
@@ -867,7 +885,7 @@ function today(){ var d = new Date(); d.setDate(d.getDate() + (dayOffset | 0)); 
 function mkQ(b, ans){ return { a:b * ans, b:b, ans:ans, key:(b * ans) + '÷' + b }; }
 function allQ(){ var l = []; for(var b = 1; b <= 9; b++) for(var n = 1; n <= 9; n++) l.push(mkQ(b, n)); return l; }
 
-var TABS = ['home','zukan','shop','title'];
+var TABS = ['mine','home','zukan','shop','title'];
 function showScreen(id){
   var list = document.querySelectorAll('.screen');
   for(var i = 0; i < list.length; i++) list[i].classList.toggle('active', list[i].id === id);
@@ -878,6 +896,7 @@ function showScreen(id){
 }
 function goTab(id){
   if(id === 'home') renderHome();
+  else if(id === 'mine') renderMine();
   else if(id === 'zukan') openZukan();
   else if(id === 'shop') renderShop();
   else renderTitle();
@@ -1338,7 +1357,7 @@ function renderTitle(){
 
   var rc = readyCount();
   $('boxBtn').innerHTML = '<span class="s-title">⚒️ こうぼう</span>' +
-    '<span class="s-info">' + (rc === 0 ? '✅ きょうの つづきは おわり ・ ⛏️ 新しく ほれるよ' : '⛏️ つづきを まっている ほうせき ' + rc + 'こ') + '</span>' +
+    '<span class="s-info">' + (rc === 0 ? '✅ きょうの つづきは おわり ・ ⛏️ はっくつばで ほれるよ' : '⛏️ つづきを まっている ほうせき ' + rc + 'こ') + '</span>' +
     '<span class="s-info">📖 図かん ' + zukanStats().got + ' / 81</span>';
 }
 
@@ -1359,16 +1378,16 @@ function dayTrack(doneDays, nowDay){
   }
   return '<div class="days">' + h + '</div>';
 }
-var homeSel = null;   // こうぼうで えらんでいる もの（ほうせきの 式 か 'dig'）
-/* えらぶ ものが ないときは、きょう つづきが できる いちばん 古い ほうせき → なければ「新しく ほる」 */
+var homeSel = null;   // こうぼうで えらんでいる ほうせきの 式
+/* えらぶ ものが ないときは、きょう つづきが できる いちばん 古い ほうせき → なければ さいしょの ほうせき */
 function fixHomeSel(){
-  if(homeSel !== 'dig' && homeSel && findCraft(homeSel)) return;
-  homeSel = 'dig';
+  if(homeSel && findCraft(homeSel)) return;
+  homeSel = null;
   for(var i = 0; i < crafts.length; i++) if(!doneToday(crafts[i])){ homeSel = crafts[i].key; return; }
+  if(crafts.length) homeSel = crafts[0].key;
 }
 function renderBench(){
-  var h = '<button class="bench-it dig' + (homeSel === 'dig' ? ' sel' : '') + '" data-key="dig">' +
-            '<span class="bi-gem">⛏️</span><span class="bi-t">新しく<br>ほる</span></button>';
+  var h = '';
   crafts.forEach(function(c){
     var q = parseKey(c.key), dn = doneToday(c);
     h += '<button class="bench-it' + (dn ? ' dn' : '') + (homeSel === c.key ? ' sel' : '') + '" data-key="' + c.key + '">' +
@@ -1376,47 +1395,64 @@ function renderBench(){
            '<span class="bi-t">' + (dn ? 'あした<br>' : '') + (c.day + 1) + '日目</span></button>';
   });
   $('wBench').innerHTML = h;
+  $('wBench').style.display = crafts.length ? '' : 'none';
+}
+function renderStats(id){
+  var st = zukanStats();
+  $(id).innerHTML = '<span>📖 図かん ' + st.got + ' / 81</span><span>★★★ ' + st.star3 + '</span>' +
+    (st.rainbow ? '<span>🌈 にじ色 ' + st.rainbow + '</span>' : '') +
+    '<span>' + getTitle(total).cur.e + ' ' + getTitle(total).cur.t + '</span>';
 }
 function renderHome(){
   fixHomeSel();
   renderBench();
-  var c = homeSel === 'dig' ? null : findCraft(homeSel);
-  var done = doneToday(c);
-  var gemHtml, name, sub, nameCls = '';
+  var c = findCraft(homeSel), gb = $('goBtn');
   if(!c){
-    gemHtml = gemSVG(1, -1);
-    name = '？ なぞの げんせき';
-    sub = 'どんな ほうせきが 出てくるかな？ げんせきは 1日に いくつでも ほれるよ。<br>4日 かけて アクセサリーに しあげよう！';
-  }else{
-    var q = parseKey(c.key), lv = c.day;
-    gemHtml = gemSVG(q.b, lv, q.ans, { black:c.black, rainbow:c.black });
-    name = (c.black ? '🖤 のろわれた 黒い ' : '') + GEMS[q.b].name + '<small>' + q.a + ' ÷ ' + q.b + ' の ほうせき</small>';
-    if(c.black) nameCls = ' black';
-    sub = LV_ICON[lv] + ' いまは「' + LV_NAME[lv] + '」' +
-          (done ? ' ・ この ほうせきの つづきは あした！' : '') +
-          (c.black ? '<br>4日 かけて しあげると、のろいが とけて にじ色に かがやくよ！' : '') +
-          (c.aura ? '<br>⚡ オーラ ボーナス 〇' : '');
+    // まだ こうぼうに ほうせきが ない
+    $('wCard').innerHTML = '<div class="w-gem">' + gemSVG(1, -1) + '</div>' +
+      '<div class="w-empty">こうぼうの さぎょうだいは まだ からっぽ。<br>はっくつばで げんせきを ほりだすと、<br>ここで 2日目から そだてられるよ！</div>';
+    gb.className = 'gbtn go-btn to-mine shine';
+    gb.innerHTML = '⛏️ はっくつばへ いく<small>げんせきは 1日に いくつでも ほれるよ</small>';
+    renderStats('wStats'); renderDbg();
+    return;
   }
-  var nd = c ? c.day + 1 : 1;
+  var done = doneToday(c);
+  var q = parseKey(c.key), lv = c.day;
+  var gemHtml = gemSVG(q.b, lv, q.ans, { black:c.black, rainbow:c.black });
+  var name = (c.black ? '🖤 のろわれた 黒い ' : '') + GEMS[q.b].name + '<small>' + q.a + ' ÷ ' + q.b + ' の ほうせき</small>';
+  var nameCls = c.black ? ' black' : '';
+  var sub = LV_ICON[lv] + ' いまは「' + LV_NAME[lv] + '」' +
+        (done ? ' ・ この ほうせきの つづきは あした！' : '') +
+        (c.black ? '<br>4日 かけて しあげると、のろいが とけて にじ色に かがやくよ！' : '') +
+        (c.aura ? '<br>⚡ オーラ ボーナス 〇' : '');
+  var nd = c.day + 1;
   $('wCard').innerHTML = '<div class="w-gem">' + gemHtml + '</div>' +
     '<div class="w-name' + nameCls + '">' + name + '</div>' +
     '<div class="w-sub">' + sub + '</div>' +
-    dayTrack(c ? c.day : 0, done ? 0 : nd);
-
-  var gb = $('goBtn');
+    dayTrack(c.day, done ? 0 : nd);
   if(done){
     gb.className = 'gbtn go-btn done';
-    gb.innerHTML = '✅ この ほうせきは きょうは おわり<small>あした つづきを しよう ・ ⛏️ 新しい げんせきは いつでも ほれるよ</small>';
+    gb.innerHTML = '✅ この ほうせきは きょうは おわり<small>あした つづきを しよう ・ ⛏️ はっくつばでは いつでも ほれるよ</small>';
   }else{
     gb.className = 'gbtn go-btn shine';
     gb.innerHTML = DAYS[nd].i + ' ' + nd + '日目「' + DAYS[nd].n + '」を はじめる<small>' + DAYS[nd].d + ' ・ 4もん（まちがえても だいじょうぶ）</small>';
   }
-  var st = zukanStats();
-  $('wStats').innerHTML = '<span>📖 図かん ' + st.got + ' / 81</span><span>★★★ ' + st.star3 + '</span>' +
-    (st.rainbow ? '<span>🌈 にじ色 ' + st.rainbow + '</span>' : '') +
-    '<span>' + getTitle(total).cur.e + ' ' + getTitle(total).cur.t + '</span>';
+  renderStats('wStats');
   renderDbg();
 }
+/* ================= はっくつば（新しい げんせきを ほる＝1日目） ================= */
+function renderMine(){
+  var rc = readyCount();
+  $('mCard').innerHTML = '<div class="w-gem">' + gemSVG(1, -1) + '</div>' +
+    '<div class="w-name">？ なぞの げんせき<small>' + (dig ? 'ほりかけの げんせきが うまっているよ' : 'どんな ほうせきが 出てくるかな？') + '</small></div>' +
+    '<div class="w-sub">わり算を 4もん とくと、げんせきが 1こ ほりだせるよ。<br>ほりだした げんせきは「こうぼう」で 2日目から そだてよう！</div>' +
+    dayTrack(0, 1);
+  $('mGo').innerHTML = DAYS[1].i + ' ' + (dig ? 'つづきを ほる' : 'はっくつを はじめる') + '<small>' + DAYS[1].d + ' ・ 4もん（まちがえても だいじょうぶ）</small>';
+  renderStats('mStats');
+  if(crafts.length) $('mStats').insertAdjacentHTML('afterbegin', '<span>⚒️ こうぼう ' + crafts.length + 'こ' + (rc ? '（きょう つづき ' + rc + 'こ）' : '') + '</span>');
+  renderDbg();
+}
+$('mGo').addEventListener('click', function(){ ensureAudio(); startGame('craft', 'dig'); });
 $('wBench').addEventListener('click', function(e){
   var it = e.target.closest('.bench-it');
   if(!it) return;
@@ -1427,7 +1463,9 @@ $('wBench').addEventListener('click', function(e){
 $('goBtn').addEventListener('click', function(){
   ensureAudio();
   fixHomeSel();
-  if(homeSel !== 'dig' && doneToday(findCraft(homeSel))){ sndBeep(false); homeSel = 'dig'; renderHome(); return; }
+  var c = findCraft(homeSel);
+  if(!c){ sndBeep(false); goTab('mine'); return; }
+  if(doneToday(c)){ sndBeep(false); return; }
   startGame('craft', homeSel);
 });
 
@@ -1507,7 +1545,7 @@ function showDetail(key){
   }else{
     title = GEMS[q.b].name + '（' + GEMS[q.b].col + '）';
     lvTxt = 'まだ 出会って いないよ';
-    note = '答えが ' + q.ans + ' の 式は「' + ACCS[q.ans] + '」に なるよ。こうぼうで 出会えるかも！';
+    note = '答えが ' + q.ans + ' の 式は「' + ACCS[q.ans] + '」に なるよ。はっくつばで 出会えるかも！';
   }
   $('zDetail').innerHTML = '<div class="zd-main">' + cellGem(q, cs) +
     '<div class="zd-text">' +
@@ -2108,7 +2146,8 @@ function finishGame(kind){
     box.innerHTML = html;
   }
 
-  $('againBtn').textContent = (kind === 'craft') ? '🎯 フリー練習へ' : ((kind === 'toku') ? (tokuPool().length ? '🔁 もういちど とっくん' : '🎯 モードを えらぶ') : '🔁 もういちど ちょうせん');
+  var dug = (kind === 'craft' && g.cday === 1);
+  $('againBtn').textContent = dug ? '⛏️ もう 1こ ほる' : (kind === 'craft') ? '🎯 フリー練習へ' : ((kind === 'toku') ? (tokuPool().length ? '🔁 もういちど とっくん' : '🎯 モードを えらぶ') : '🔁 もういちど ちょうせん');
   $('toTitleBtn').textContent = (kind === 'craft') ? '⚒️ こうぼうへ' : '🎯 フリー練習へ';
 
   if(kind === 'over'){ sndOver(); }
@@ -2121,11 +2160,12 @@ $('rGems').addEventListener('click', function(e){
 });
 $('againBtn').addEventListener('click', function(){
   if(!G) return;
+  if(G.mode === 'craft' && G.cday === 1){ startGame('craft', 'dig'); return; }
   if(G.mode === 'craft' || (G.mode === 'toku' && tokuPool().length === 0)){ goTab('title'); return; }
   startGame(G.mode);
 });
 $('toTitleBtn').addEventListener('click', function(){ var m = G && G.mode; stopGame(); goTab(m === 'craft' ? 'home' : 'title'); });
-$('quitBtn').addEventListener('click', function(){ var m = G && G.mode; stopGame(); goTab(m === 'craft' ? 'home' : 'title'); });
+$('quitBtn').addEventListener('click', function(){ var m = G && G.mode, d = G && G.cday; stopGame(); goTab(m === 'craft' ? (d === 1 ? 'mine' : 'home') : 'title'); });
 $('choices').addEventListener('click', function(e){
   var b = e.target.closest('.choice');
   if(b) answer(parseInt(b.getAttribute('data-i'), 10));
@@ -2272,7 +2312,7 @@ tmBadge();
 
 /* ================= はじめ ================= */
 renderMute();
-goTab('home');
+goTab(crafts.length ? 'home' : 'mine');
 })();
 </script>
 </body>
