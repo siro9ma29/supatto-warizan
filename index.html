@@ -510,6 +510,16 @@ body.fever::before{display:none;}
 .go-btn small{display:block;font-size:.55em;opacity:.95;}
 .go-btn.done{background:linear-gradient(135deg,#55549a,#34336f);}
 .w-stats{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
+.w-bench{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 6px;-webkit-overflow-scrolling:touch;}
+.bench-it{flex:0 0 auto;width:clamp(64px,12vmin,84px);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border-radius:14px;
+  background:rgba(253,248,232,.12);border:3px solid rgba(245,176,65,.45);color:var(--cream);font:inherit;font-weight:900;font-size:clamp(11px,2vmin,14px);line-height:1.15;cursor:pointer;touch-action:manipulation;}
+.bench-it .bi-gem{position:relative;width:clamp(40px,8vmin,56px);height:clamp(40px,8vmin,56px);display:flex;align-items:center;justify-content:center;font-size:clamp(28px,6vmin,40px);}
+.bench-it .bi-gem .gem{width:100%;height:100%;}
+.bench-it .bi-ok{position:absolute;right:-6px;bottom:-4px;font-style:normal;font-size:18px;}
+.bench-it.dig{background:linear-gradient(135deg,#2ecc71,#138d4b);border-color:#9ff0c0;color:#fff;}
+.bench-it.dn{opacity:.6;}
+.bench-it.sel{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold),0 0 14px rgba(255,216,77,.6);opacity:1;}
+@media (orientation:landscape) and (min-aspect-ratio:5/4){ .w-bench{flex-wrap:wrap;justify-content:center;max-height:38vh;overflow-y:auto;} }
 .w-stats span{background:rgba(253,248,232,.12);color:var(--cream);border:2px solid rgba(245,176,65,.55);border-radius:12px;padding:3px 10px;font-weight:900;font-size:clamp(11px,2vmin,15px);white-space:nowrap;}
 
 /* ---- ほうせき図かん（81しゅるい） ---- */
@@ -584,11 +594,12 @@ body.fever::before{display:none;}
   <section id="home" class="screen active">
     <div class="w-head">
       <button id="gearBtn" aria-label="おとなの 人の せってい">⚙</button>
-      <div class="w-title"><b>💎 まほうの ほうせき こうぼう</b><small>スパッと！わり算マスター ・ 1日 4もんで ほうせきが そだつ</small></div>
+      <div class="w-title"><b>💎 まほうの ほうせき こうぼう</b><small>スパッと！わり算マスター ・ 1日 4もんで 1だんかい そだつ</small></div>
     </div>
     <div class="w-main">
       <div class="w-card frame" id="wCard"></div>
       <div class="w-side">
+        <div class="w-bench" id="wBench" aria-label="さぎょうだい"></div>
         <button class="gbtn go-btn" id="goBtn"></button>
         <div class="w-stats" id="wStats"></div>
       </div>
@@ -792,14 +803,26 @@ var weak   = load('weak', {});
 var total  = load('total', 0);
 var muted  = load('muted', false);
 var clears = load('clears', {});
-var craft  = load('craft', null);     // いま こうぼうで 作っている ほうせき
+var crafts = load('crafts', null);    // こうぼうで 育てている ほうせき（いくつでも）
+var dig    = load('dig', null);       // ほりはじめて まだ 1日目を おえて いない げんせき（やめても 同じ げんせきが 出る）
+var craft  = null;                    // いま あそんでいる ほうせき（crafts の 1つ か dig）
 var zukan  = load('zukan', {});       // かんせいした ほうせき（図かん）
 var dayOffset = load('dayOffset', 0); // [デバッグ] 進めた 日数
 if(!isObj(best)) best = {};
 if(!isObj(weak)) weak = {};
 if(!isObj(clears)) clears = {};
 if(!isObj(zukan)) zukan = {};
-if(!isObj(craft) || !craft.key || !Array.isArray(craft.log) || !parseKey(craft.key)) craft = null;
+function okCraft(c){ return isObj(c) && c.key && Array.isArray(c.log) && parseKey(c.key); }
+if(!Array.isArray(crafts)){
+  // v3.0① までは 1つだけ（craft）。とちゅうの ものを 引きつぐ
+  var old = load('craft', null);
+  crafts = [];
+  if(okCraft(old) && old.day >= 1 && old.day < 4) crafts.push(old);
+  else if(okCraft(old) && old.day === 0) dig = old;
+  save('crafts', crafts); save('dig', dig);
+}
+crafts = crafts.filter(function(c){ return okCraft(c) && c.day >= 1 && c.day < 4; });
+if(!okCraft(dig) || dig.day !== 0) dig = null;
 if(typeof dayOffset !== 'number' || !isFinite(dayOffset)) dayOffset = 0;
 if(typeof total !== 'number' || !isFinite(total)) total = 0;
 /* v2の 苦手スコア（誤答+2・3.5秒以上+1・未満−1）を 設計書の 大きさ（2.5ばい）に 引きつぐ。v2の gems は のこしたまま つかわない */
@@ -1073,24 +1096,29 @@ function gemSVG(dan, lv, ans, opt){
 }
 
 /* ================= こうぼう（4日間の 育成）のルール ================= */
-function saveCraft(){ save('craft', craft); }
+function saveCraft(){ save('crafts', crafts); save('dig', dig); }
 function saveZukan(){ save('zukan', zukan); }
 function itemName(dan, ans){ return GEMS[dan].name + 'の ' + ACCS[ans]; }
 
-/* きょうの しごとが おわっているか */
-function craftDoneToday(){ return !!(craft && craft.last && craft.last >= today()); }
-/* つぎに やる日（1〜4）。新しい ほうせきから なら 1 */
-function craftNextDay(){ return (!craft || craft.day >= 4) ? 1 : craft.day + 1; }
+/* その ほうせきの きょうの しごとが おわっているか（同じ ほうせきは 1日 1だんかい） */
+function doneToday(c){ return !!(c && c.last && c.last >= today()); }
+function findCraft(key){ for(var i = 0; i < crafts.length; i++) if(crafts[i].key === key) return crafts[i]; return null; }
+/* きょう つづきが できる ほうせきの 数 */
+function readyCount(){ return crafts.filter(function(c){ return !doneToday(c); }).length; }
 
 /* ① ターゲット式（げんせきの しょうたい）を きめる */
 function pickTarget(){
+  var busy = {};
+  crafts.forEach(function(c){ busy[c.key] = true; });
   // （③で：お客さんの リクエストを うけている ときは、その じょうけんに 合う 式を ここで さいしょに えらぶ）
   if(Math.random() < BLACK_RATE){
-    var wl = Object.keys(weak).filter(function(k){ return weak[k] >= BLACK_MIN; }).map(parseKey).filter(Boolean);
+    var wl = Object.keys(weak).filter(function(k){ return weak[k] >= BLACK_MIN && !busy[k]; }).map(parseKey).filter(Boolean);
     if(wl.length > 0) return { q:weightedPick(wl, function(p){ return weak[p.key]; }), black:true };
   }
   // まだ 作って いない 式は、作った 式の 4ばい 出やすい
-  return { q:weightedPick(allQ(), function(p){ return zukan[p.key] ? 1 : 4; }), black:false };
+  var free = allQ().filter(function(p){ return !busy[p.key]; });
+  if(free.length === 0) free = allQ();
+  return { q:weightedPick(free, function(p){ return zukan[p.key] ? 1 : 4; }), black:false };
 }
 
 /* ② その日の 4もん（ちょうふく なし）。4もんめは いつも ターゲット式 */
@@ -1142,7 +1170,9 @@ function craftAdvance(g){
   });
   craft.day++;
   craft.last = today();
+  homeSel = null;                                            // こうぼうに もどったら つぎの ほうせきを えらびなおす
   craft.log.push({ c:c, t:Math.round(t * 10) / 10 });
+  if(craft === dig){ crafts.push(craft); dig = null; }       // ほりだした げんせきを さぎょうだいに のせる
   if(craft.day === 3 && tgt && tgt.miss === 0 && tgt.time <= FAST3) craft.aura = true;
   var res = { day:craft.day, ok:c, aura:(craft.day === 3 && craft.aura) };
   if(craft.day >= 4){
@@ -1155,6 +1185,7 @@ function craftAdvance(g){
     z.last = { star:sc.star, ok:sc.ok, avg:Math.round(sc.avg * 10) / 10, aura:!!craft.aura, black:!!craft.black };
     zukan[craft.key] = z; saveZukan();
     res.done = true; res.score = sc; res.isNew = (z.n === 1);
+    crafts = crafts.filter(function(x){ return x !== craft; }); // しあがった ものは 図かんへ
   }
   saveCraft();
   return res;
@@ -1255,9 +1286,9 @@ function renderTitle(){
     '<span class="rank-badge">' + tt.cur.e + ' ' + tt.cur.t + '</span>' +
     '<span class="rank-info">' + info + '</span>' +
     '<div class="rank-bar"><i style="width:' + Math.max(3, Math.min(100, pct)) + '%"></i></div>';
-  $('freeNote').textContent = craftDoneToday()
-    ? '⚒️ きょうの こうぼうの しごとは おわり！ ここで うでを みがこう'
-    : '⚒️ まずは「こうぼう」で きょうの 4もんを やろう！';
+  $('freeNote').textContent = readyCount() === 0
+    ? '⚒️ きょうの つづきは おわり！ ここで うでを みがこう（新しい げんせきは いつでも ほれるよ）'
+    : '⚒️ まずは「こうぼう」で きょうの つづきを やろう！';
 
   var html = '';
   MODE_ORDER.forEach(function(m){
@@ -1288,9 +1319,9 @@ function renderTitle(){
     tb.innerHTML = '<span class="s-title">🔥 にがて とっくん</span><span class="s-info">' + pool.length + 'もん ・ まちがえても つづけられるよ</span><span class="chips">' + chips + '</span>';
   }
 
-  var done = craftDoneToday();
+  var rc = readyCount();
   $('boxBtn').innerHTML = '<span class="s-title">⚒️ こうぼう</span>' +
-    '<span class="s-info">' + (done ? '✅ きょうの しごとは おわり' : '⛏️ ' + craftNextDay() + '日目の しごとが まってるよ！') + '</span>' +
+    '<span class="s-info">' + (rc === 0 ? '✅ きょうの つづきは おわり ・ ⛏️ 新しく ほれるよ' : '⛏️ つづきを まっている ほうせき ' + rc + 'こ') + '</span>' +
     '<span class="s-info">📖 図かん ' + zukanStats().got + ' / 81</span>';
 }
 
@@ -1311,41 +1342,55 @@ function dayTrack(doneDays, nowDay){
   }
   return '<div class="days">' + h + '</div>';
 }
+var homeSel = null;   // こうぼうで えらんでいる もの（ほうせきの 式 か 'dig'）
+/* えらぶ ものが ないときは、きょう つづきが できる いちばん 古い ほうせき → なければ「新しく ほる」 */
+function fixHomeSel(){
+  if(homeSel !== 'dig' && homeSel && findCraft(homeSel)) return;
+  homeSel = 'dig';
+  for(var i = 0; i < crafts.length; i++) if(!doneToday(crafts[i])){ homeSel = crafts[i].key; return; }
+}
+function renderBench(){
+  var h = '<button class="bench-it dig' + (homeSel === 'dig' ? ' sel' : '') + '" data-key="dig">' +
+            '<span class="bi-gem">⛏️</span><span class="bi-t">新しく<br>ほる</span></button>';
+  crafts.forEach(function(c){
+    var q = parseKey(c.key), dn = doneToday(c);
+    h += '<button class="bench-it' + (dn ? ' dn' : '') + (homeSel === c.key ? ' sel' : '') + '" data-key="' + c.key + '">' +
+           '<span class="bi-gem">' + gemSVG(q.b, c.day, q.ans, { black:c.black }) + (dn ? '<i class="bi-ok">✅</i>' : '') + '</span>' +
+           '<span class="bi-t">' + (dn ? 'あした<br>' : '') + (c.day + 1) + '日目</span></button>';
+  });
+  $('wBench').innerHTML = h;
+}
 function renderHome(){
-  var done = craftDoneToday();
-  var fresh = !craft || craft.day === 0 || (craft.day >= 4 && !done);
+  fixHomeSel();
+  renderBench();
+  var c = homeSel === 'dig' ? null : findCraft(homeSel);
+  var done = doneToday(c);
   var gemHtml, name, sub, nameCls = '';
-  if(fresh){
+  if(!c){
     gemHtml = gemSVG(1, -1);
     name = '？ なぞの げんせき';
-    sub = 'どんな ほうせきが 出てくるかな？ 4日 かけて アクセサリーに しあげよう！';
+    sub = 'どんな ほうせきが 出てくるかな？ げんせきは 1日に いくつでも ほれるよ。<br>4日 かけて アクセサリーに しあげよう！';
   }else{
-    var q = parseKey(craft.key), lv = craft.day;
-    gemHtml = gemSVG(q.b, lv, q.ans, { black:craft.black, rainbow:craft.black });
-    if(lv >= 4){
-      var z = zukan[craft.key] || {};
-      name = (craft.black ? '🌈 にじ色の ' : '') + itemName(q.b, q.ans);
-      sub = '🎉 かんせい！ できばえ ' + STAR_TXT[(z.last && z.last.star) || 1] + ' ・ 図かんに とうろく したよ。<br>あした 新しい げんせきを ほりに 行こう！';
-    }else{
-      name = (craft.black ? '🖤 のろわれた 黒い ' : '') + GEMS[q.b].name + '<small>' + q.a + ' ÷ ' + q.b + ' の ほうせき</small>';
-      if(craft.black) nameCls = ' black';
-      sub = LV_ICON[lv] + ' いまは「' + LV_NAME[lv] + '」' +
-            (craft.black ? '<br>4日 かけて しあげると、のろいが とけて にじ色に かがやくよ！' : '') +
-            (craft.aura ? '<br>⚡ オーラ ボーナス 〇' : '');
-    }
+    var q = parseKey(c.key), lv = c.day;
+    gemHtml = gemSVG(q.b, lv, q.ans, { black:c.black, rainbow:c.black });
+    name = (c.black ? '🖤 のろわれた 黒い ' : '') + GEMS[q.b].name + '<small>' + q.a + ' ÷ ' + q.b + ' の ほうせき</small>';
+    if(c.black) nameCls = ' black';
+    sub = LV_ICON[lv] + ' いまは「' + LV_NAME[lv] + '」' +
+          (done ? ' ・ この ほうせきの つづきは あした！' : '') +
+          (c.black ? '<br>4日 かけて しあげると、のろいが とけて にじ色に かがやくよ！' : '') +
+          (c.aura ? '<br>⚡ オーラ ボーナス 〇' : '');
   }
-  var shown = fresh ? 0 : craft.day;
+  var nd = c ? c.day + 1 : 1;
   $('wCard').innerHTML = '<div class="w-gem">' + gemHtml + '</div>' +
     '<div class="w-name' + nameCls + '">' + name + '</div>' +
     '<div class="w-sub">' + sub + '</div>' +
-    dayTrack(shown, done ? 0 : craftNextDay());
+    dayTrack(c ? c.day : 0, done ? 0 : nd);
 
   var gb = $('goBtn');
   if(done){
     gb.className = 'gbtn go-btn done';
-    gb.innerHTML = '✅ きょうは おわり！<small>あした つづきを しよう ・ 🎯 フリー練習で うでを みがけるよ</small>';
+    gb.innerHTML = '✅ この ほうせきは きょうは おわり<small>あした つづきを しよう ・ ⛏️ 新しい げんせきは いつでも ほれるよ</small>';
   }else{
-    var nd = craftNextDay();
     gb.className = 'gbtn go-btn shine';
     gb.innerHTML = DAYS[nd].i + ' ' + nd + '日目「' + DAYS[nd].n + '」を はじめる<small>' + DAYS[nd].d + ' ・ 4もん（まちがえても だいじょうぶ）</small>';
   }
@@ -1355,10 +1400,18 @@ function renderHome(){
     '<span>' + getTitle(total).cur.e + ' ' + getTitle(total).cur.t + '</span>';
   renderDbg();
 }
+$('wBench').addEventListener('click', function(e){
+  var it = e.target.closest('.bench-it');
+  if(!it) return;
+  ensureAudio(); sndBeep(true);
+  homeSel = it.getAttribute('data-key');
+  renderHome();
+});
 $('goBtn').addEventListener('click', function(){
   ensureAudio();
-  if(craftDoneToday()){ sndBeep(false); goTab('title'); return; }
-  startGame('craft');
+  fixHomeSel();
+  if(homeSel !== 'dig' && doneToday(findCraft(homeSel))){ sndBeep(false); homeSel = 'dig'; renderHome(); return; }
+  startGame('craft', homeSel);
 });
 
 /* ================= ほうせき図かん（81しゅるい） ================= */
@@ -1366,7 +1419,8 @@ var zSel = null;
 function cellState(key){
   var z = zukan[key];
   if(z) return { kind:'got', z:z };
-  if(craft && craft.key === key && craft.day >= 1 && craft.day < 4) return { kind:'wip', lv:craft.day, black:craft.black };
+  var c = findCraft(key);
+  if(c) return { kind:'wip', lv:c.day, black:c.black };
   return { kind:'none' };
 }
 function cellGem(q, cs){
@@ -1398,7 +1452,7 @@ function openZukan(){
   showDetail(zSel || firstKey());
 }
 function firstKey(){
-  if(craft && craft.day >= 1 && parseKey(craft.key)) return craft.key;
+  if(crafts.length) return crafts[0].key;
   var keys = Object.keys(zukan).filter(parseKey);
   return keys.length ? keys[0] : '1÷1';
 }
@@ -1513,7 +1567,7 @@ $('dbgNext').addEventListener('click', function(){
 $('dbgReset').addEventListener('click', function(){
   dayOffset = 0; save('dayOffset', dayOffset);
   // 進めた 日づけで プレイした きろくが「みらい」に ならないように
-  if(craft && craft.last > today()){ craft.last = ''; saveCraft(); }
+  crafts.forEach(function(c){ if(c.last > today()) c.last = ''; }); saveCraft();
   sndBeep(false); openSettings(); renderDbg();
 });
 function armButton(id, label, action){
@@ -1533,7 +1587,7 @@ function armButton(id, label, action){
   });
 }
 armButton('weakReset', 'にがて きろくを リセット', function(){ weak = {}; save('weak', weak); });
-armButton('craftReset', 'こうぼう・図かんの きろくを リセット', function(){ craft = null; zukan = {}; saveCraft(); saveZukan(); zSel = null; });
+armButton('craftReset', 'こうぼう・図かんの きろくを リセット', function(){ crafts = []; dig = null; craft = null; homeSel = null; zukan = {}; saveCraft(); saveZukan(); zSel = null; });
 
 /* ================= 出題 ================= */
 var G = null;
@@ -1672,7 +1726,7 @@ function updateComboSmall(){
   else el.classList.remove('show');
 }
 
-function startGame(mode){
+function startGame(mode, key){
   ensureAudio();
   stopGame();
   var isToku = (mode === 'toku'), isCraft = (mode === 'craft');
@@ -1680,11 +1734,16 @@ function startGame(mode){
   if(isToku && pool.length === 0){ goTab('title'); return; }
   var list = null, cday = 0;
   if(isCraft){
-    if(craftDoneToday()){ goTab('home'); return; }
-    if(!craft || craft.day >= 4){
-      var tg = pickTarget();
-      craft = { key:tg.q.key, black:tg.black, day:0, last:'', log:[], aura:false, start:today() };
-      saveCraft();
+    if(key === 'dig'){
+      if(!dig){
+        var tg = pickTarget();
+        dig = { key:tg.q.key, black:tg.black, day:0, last:'', log:[], aura:false, start:today() };
+        saveCraft();
+      }
+      craft = dig;
+    }else{
+      craft = findCraft(key);
+      if(!craft || doneToday(craft)){ goTab('home'); return; }
     }
     cday = craft.day + 1;
     list = dayQuestions(cday, parseKey(craft.key));
@@ -1962,7 +2021,8 @@ function finishGame(kind){
     $('rTime').textContent = res.ok; $('rUnit').textContent = '/ 4もん 1回で せいかい';
     $('rSub').textContent = res.done ? '4日間 おつかれさま！' :
       (res.day === 1 && craft.black ? '😱 のろわれた 黒い げんせき だった！ 4日 かけて しあげると、にじ色に かがやくよ。'
-       : (res.aura ? '⚡ 3びょう いないで 答えて オーラ ボーナス！ ' : '') + 'あしたは ' + (res.day + 1) + '日目「' + DAYS[res.day + 1].n + '」だよ。');
+       : (res.aura ? '⚡ 3びょう いないで 答えて オーラ ボーナス！ ' : '') + 'あしたは ' + (res.day + 1) + '日目「' + DAYS[res.day + 1].n + '」だよ。' +
+       (res.day === 1 ? ' ほかの げんせきも ほれるよ！' : ''));
     if(res.done){
       var rd = $('rDone');
       rd.className = 'r-done show' + (craft.black ? ' rainbow' : '');
